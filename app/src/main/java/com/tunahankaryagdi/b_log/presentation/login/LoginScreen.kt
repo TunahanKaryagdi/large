@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -26,13 +27,25 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 
 
 @Composable
+fun LoginScreenRoute(
+    navigateToSignup : () -> Unit
+) {
+    LoginScreen(
+        navigateToSignup = navigateToSignup
+    )
+}
+
+
+
+@Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToSignup : () -> Unit
 ) {
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(Paddings.mediumPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -44,7 +57,7 @@ fun LoginScreen(
           color = MaterialTheme.colorScheme.primary
       )
 
-        SpacerHeight(dp = Paddings.mediumPadding)
+         SpacerHeight(dp = Paddings.mediumPadding)
 
       CustomTextField(
           label = stringResource(id = R.string.email),
@@ -74,13 +87,17 @@ fun LoginScreen(
 
         SpacerHeight(dp = Paddings.mediumPadding)
 
-        SignupSection()
+        SignupSection(
+            navigateToSignup = navigateToSignup
+        )
     }
 }
 
 
 @Composable
-private fun SignupSection() {
+private fun SignupSection(
+    navigateToSignup : () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -97,7 +114,7 @@ private fun SignupSection() {
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.clickable {
-
+                navigateToSignup()
             }
         )
 

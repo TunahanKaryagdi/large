@@ -10,7 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.tunahankaryagdi.b_log.presentation.login.LoginScreen
+import com.tunahankaryagdi.b_log.presentation.login.loginRoute
+import com.tunahankaryagdi.b_log.presentation.navigation.NavigationHost
 import com.tunahankaryagdi.b_log.ui.theme.BlogTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +26,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    val navController = rememberNavController()
+                    NavigationHost(navController = navController, startDestination = loginRoute)
                 }
             }
         }
