@@ -15,7 +15,10 @@ import com.tunahankaryagdi.b_log.presentation.login.LoginScreen
 import com.tunahankaryagdi.b_log.presentation.login.loginRoute
 import com.tunahankaryagdi.b_log.presentation.navigation.NavigationHost
 import com.tunahankaryagdi.b_log.ui.theme.BlogTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
