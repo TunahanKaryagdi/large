@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.CustomButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTextField
@@ -28,10 +29,12 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 
 @Composable
 fun LoginScreenRoute(
-    navigateToSignup : () -> Unit
+    navigateToSignup : () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginScreen(
-        navigateToSignup = navigateToSignup
+        navigateToSignup = navigateToSignup,
+        onLoginClick = {viewModel.login()}
     )
 }
 
@@ -40,7 +43,8 @@ fun LoginScreenRoute(
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navigateToSignup : () -> Unit
+    navigateToSignup : () -> Unit,
+    onLoginClick: ()-> Unit
 ) {
 
     Column(
@@ -82,7 +86,8 @@ fun LoginScreen(
 
         CustomButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.login)
+            text = stringResource(id = R.string.login),
+            onClick = onLoginClick
         )
 
         SpacerHeight(dp = Paddings.mediumPadding)

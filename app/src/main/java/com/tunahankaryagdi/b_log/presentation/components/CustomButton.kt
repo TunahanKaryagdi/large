@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun CustomButton(
     modifier: Modifier = Modifier,
-    text: String
+    text: String,
+    onClick: ()-> Unit
 ) {
 
     TextButton(
@@ -18,7 +19,7 @@ fun CustomButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
-        onClick = {},
+        onClick = onClick,
         modifier = modifier
     ){
         Text(

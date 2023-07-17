@@ -97,7 +97,8 @@ fun SignupScreen(
 
         CustomButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.signup)
+            text = stringResource(id = R.string.signup),
+            onClick = {}
         )
 
     }
