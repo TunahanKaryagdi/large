@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.login.loginScreen
 import com.tunahankaryagdi.b_log.presentation.signup.signupRoute
 import com.tunahankaryagdi.b_log.presentation.signup.signupScreen
@@ -24,6 +25,8 @@ fun NavigationHost(
         )
 
         signupScreen()
+
+        homeScreen()
 
     }
 }

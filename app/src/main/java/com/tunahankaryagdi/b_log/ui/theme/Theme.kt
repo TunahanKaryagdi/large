@@ -27,7 +27,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = secondaryBlueLight,
     onBackground = darkTextColorLight,
     onPrimary = lightTextColorLight,
-    onSecondary = grayTextColorLight
+    onSecondary = grayTextColorLight,
+    background = backgroundColorLight,
+    onSurface = backgroundVariantColorLight
 
 
     /* Other default colors to override

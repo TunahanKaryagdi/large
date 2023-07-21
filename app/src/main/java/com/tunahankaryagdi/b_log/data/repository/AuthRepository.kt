@@ -12,7 +12,7 @@ class AuthRepository @Inject constructor(private val authService: AuthService) {
 
     suspend fun login(loginRequest: LoginRequest) :Resource<LoginResponse> {
 
-        return try {
+       return try {
             Resource.Success(authService.login(loginRequest))
         }
         catch (e: Exception){

@@ -18,11 +18,11 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
 
         viewModelScope.launch {
 
-            val result = authRepository.login(LoginRequest("",""))
+            val result = authRepository.login(LoginRequest("test1@gmail.com","12345a"))
 
             when(result){
                 is Resource.Success->{
-                    println(result.data.message)
+                    println(result.data.data.accessToken)
                 }
                 is Resource.Error->{
                     println(result.message)
