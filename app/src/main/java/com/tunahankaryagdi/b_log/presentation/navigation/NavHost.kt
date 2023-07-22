@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.login.loginScreen
 import com.tunahankaryagdi.b_log.presentation.signup.signupRoute
@@ -18,10 +19,15 @@ fun NavigationHost(
     modifier: Modifier = Modifier
 ) {
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+        modifier = modifier
+    ) {
 
         loginScreen(
-            navigateToSignup = { navController.navigate(signupRoute) }
+            navigateToSignup = { navController.navigate(signupRoute) },
+            navigateToHome = {navController.navigate(homeRoute)}
         )
 
         signupScreen()

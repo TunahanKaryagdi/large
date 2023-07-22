@@ -85,7 +85,7 @@ fun BlogCard(
             .fillMaxWidth(),
         onClick = { },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onSurface
+            containerColor = MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = Paddings.smallPadding)
 

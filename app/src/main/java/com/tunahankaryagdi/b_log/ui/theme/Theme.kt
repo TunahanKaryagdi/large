@@ -25,11 +25,10 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = mainBlueLight,
     secondary = secondaryBlueLight,
-    onBackground = darkTextColorLight,
+    background = backgroundColorLight,
     onPrimary = lightTextColorLight,
     onSecondary = grayTextColorLight,
-    background = backgroundColorLight,
-    onSurface = backgroundVariantColorLight
+    onBackground = darkTextColorLight,
 
 
     /* Other default colors to override

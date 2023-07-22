@@ -13,12 +13,15 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.CustomButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTextField
@@ -30,11 +33,27 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 @Composable
 fun LoginScreenRoute(
     navigateToSignup : () -> Unit,
+    navigateToHome : ()-> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val uiState : LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = viewModel.uiState ){
+        viewModel.uiState.collect{
+            if (it.navigateToMain){
+                navigateToHome()
+            }
+        }
+    }
+
+
     LoginScreen(
         navigateToSignup = navigateToSignup,
-        onLoginClick = {viewModel.login()}
+        uiState = uiState,
+        onLoginClick = viewModel::login,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange
     )
 }
 
@@ -43,8 +62,11 @@ fun LoginScreenRoute(
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    uiState: LoginUiState,
     navigateToSignup : () -> Unit,
-    onLoginClick: ()-> Unit
+    onLoginClick: ()-> Unit,
+    onEmailChange: (String)->Unit,
+    onPasswordChange: (String)->Unit,
 ) {
 
     Column(
@@ -65,19 +87,20 @@ fun LoginScreen(
 
       CustomTextField(
           label = stringResource(id = R.string.email),
-          value = "",
+          value = uiState.email,
           icon = Icons.Default.Email,
-          onValueChange = {},
+          onValueChange = onEmailChange,
           modifier = Modifier.fillMaxWidth()
+
       )
 
         SpacerHeight(dp = Paddings.smallPadding)
 
       CustomTextField(
           label = stringResource(id = R.string.password),
-          value = "",
+          value = uiState.password,
           icon = Icons.Default.Lock,
-          onValueChange = {},
+          onValueChange = onPasswordChange,
           modifier = Modifier.fillMaxWidth()
 
       )

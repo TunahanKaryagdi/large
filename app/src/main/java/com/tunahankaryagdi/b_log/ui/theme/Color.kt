@@ -14,8 +14,7 @@ val darkTextColorLight = Color(0xFF000000)
 val grayTextColorLight = Color(0xFF434343)
 val lightTextColorLight = Color(0xFFFFFFFF)
 
-//Arka planın üzerindeki renk
-val backgroundVariantColorLight = Color(0xFFF9F9EC)
+
 
 
 
