@@ -109,7 +109,7 @@ fun LoginScreen(
 
         CustomButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.login),
+            text = if (!uiState.isLoading) stringResource(id = R.string.login) else stringResource(id = R.string.loading),
             onClick = onLoginClick
         )
 

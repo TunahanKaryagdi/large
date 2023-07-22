@@ -1,7 +1,8 @@
 package com.tunahankaryagdi.b_log.di
 
-import com.tunahankaryagdi.b_log.data.repository.AuthRepository
+import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
 import com.tunahankaryagdi.b_log.data.source.remote.AuthService
+import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -38,8 +39,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(authService: AuthService) : AuthRepository{
-        return AuthRepository(authService)
+    fun provideAuthRepository(authService: AuthService) : AuthRepository {
+        return AuthRepositoryImpl(authService)
     }
 
 }

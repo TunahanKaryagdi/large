@@ -1,12 +1,10 @@
 package com.tunahankaryagdi.b_log.presentation.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tunahankaryagdi.b_log.data.model.LoginRequest
-import com.tunahankaryagdi.b_log.data.repository.AuthRepository
+import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
+import com.tunahankaryagdi.b_log.domain.use_case.LoginUseCase
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +21,7 @@ data class LoginUiState(
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : ViewModel() {
 
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState = _uiState
@@ -42,28 +40,20 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
     }
 
     fun login(){
-
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            loginUseCase.invoke(_uiState.value.email,_uiState.value.password).collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
+                    }
 
-            val result = authRepository.login(LoginRequest(_uiState.value.email,_uiState.value.password))
+                    is Resource.Error -> {
+                        _uiState.value = _uiState.value.copy(isLoading = false)
 
-            when(result){
-                is Resource.Success->{
-                    println(result.data.data.accessToken)
-                    //datastore kayıt
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        navigateToMain = true
-                    )
-                }
-                is Resource.Error->{
-                    println(result.message)
+                    }
                 }
             }
-
         }
-
     }
-
-
 }
