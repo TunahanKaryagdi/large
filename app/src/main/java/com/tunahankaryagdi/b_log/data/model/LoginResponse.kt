@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
     val message: String,
-    val data: Data,
+    val data: LoginData,
 )
 
 
-data class Data(
+data class LoginData(
 
     @SerializedName("access_token")
     val accessToken: String,

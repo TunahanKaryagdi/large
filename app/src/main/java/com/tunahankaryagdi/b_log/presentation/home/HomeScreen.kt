@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,7 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.data.model.Blog
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.utils.Paddings
@@ -34,9 +38,14 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 
 @Composable
 fun HomeScreenRoute(
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
 
-    HomeScreen()
+    val uiState : HomeUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    HomeScreen(
+        uiState = uiState
+    )
 }
 
 
@@ -45,6 +54,7 @@ fun HomeScreenRoute(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    uiState: HomeUiState,
 ) {
 
     LazyColumn(
@@ -57,8 +67,8 @@ fun HomeScreen(
             item {
                 SpacerHeight(Paddings.smallPadding)
             }
-            items(3){
-                BlogCard()
+            items(uiState.blogs.size){
+                BlogCard(blog = uiState.blogs[it])
                 SpacerHeight(Paddings.smallPadding)
             }
 
@@ -73,6 +83,7 @@ fun HomeScreen(
 @Composable
 fun BlogCard(
     modifier :Modifier = Modifier,
+    blog: Blog,
     screenWidth : Int = LocalConfiguration.current.screenWidthDp,
     screenHeight : Int = LocalConfiguration.current.screenHeightDp
 
@@ -99,7 +110,7 @@ fun BlogCard(
 
            Image(
                painter = painterResource(id = R.drawable.ic_launcher_background),
-               contentDescription = "Blog Image",
+               contentDescription = blog.title,
                contentScale = ContentScale.FillWidth,
                modifier = Modifier
                    .fillMaxWidth()
@@ -112,13 +123,13 @@ fun BlogCard(
                     .padding(horizontal = Paddings.smallPadding)
             ){
                 Text(
-                    text = "Technology",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    text = blog.tags[0],
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
                 SpacerHeight(Paddings.smallPadding)
                 Text(
-                    text = "Architectural Engineering Wonders of the modern era for your Inspiration",
+                    text = blog.title,
                     style = MaterialTheme.typography.titleMedium
                 )
                 SpacerHeight(Paddings.smallPadding)
@@ -146,7 +157,7 @@ fun BlogCard(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "21 October 2023",
+                        text = blog.updatedAt,
                         style = MaterialTheme.typography.bodyMedium
 
                     )
