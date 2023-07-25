@@ -2,8 +2,6 @@ package com.tunahankaryagdi.b_log.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahankaryagdi.b_log.data.model.LoginRequest
-import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
 import com.tunahankaryagdi.b_log.domain.use_case.LoginUseCase
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

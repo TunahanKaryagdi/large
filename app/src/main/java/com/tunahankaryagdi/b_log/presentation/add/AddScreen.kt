@@ -1,24 +1,18 @@
 package com.tunahankaryagdi.b_log.presentation.add
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,18 +21,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,53 +43,40 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.SemanticsProperties.ImeAction
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomButton
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.utils.Paddings
 
 
 @Composable
 fun AddScreenRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AddViewModel = hiltViewModel()
 ) {
 
-    var showDialog by remember {
-        mutableStateOf(false)
-    }
+    val uiState : AddUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val sectionUiState : SectionUiState by viewModel.sectionUiState.collectAsStateWithLifecycle()
+
 
     AddScreen(
         modifier = modifier,
-        title = "",
-        sectionTitle = "",
-        sectionContent = "",
-        onTitleValueChange = {
-
-        },
-        onSectionTitleValueChange = {
-
-        },
-        onSectionContentValueChange = {
-
-        },
-        onConfirmNewSection = {title,content->
-
-        },
-
-        onCancelSection ={
-
-        } ,
-        onTagClick = {str,bool->
-
-        },
-        onClickAddSection = {
-            showDialog = !showDialog
-        },
-        showDialog = showDialog
+        title = uiState.title,
+        sectionTitle = sectionUiState.sectionTitle,
+        sectionContent = sectionUiState.sectionContent,
+        onTitleValueChange = viewModel::onTitleChange,
+        onSectionTitleValueChange = viewModel::onSectionTitleChange,
+        onSectionContentValueChange = viewModel::onSectionContentChange,
+        onConfirmNewSection = viewModel::onConfirmNewSection,
+        onCancelSection =viewModel::onCancelSection ,
+        onClickTag = viewModel::onClickTag,
+        onClickAddSection = viewModel::onClickAddSection,
+        onClickSave = viewModel::onClickSave,
+        showDialog =  uiState.showDialog
     )
 }
 
@@ -115,9 +92,11 @@ fun AddScreen(
     onConfirmNewSection: (String, String) -> Unit,
     onCancelSection: () -> Unit,
     onTitleValueChange: (String) -> Unit,
-    onTagClick: (String, Boolean) -> Unit,
+    onClickTag: (String, Boolean) -> Unit,
     onClickAddSection: () -> Unit,
-    showDialog :Boolean
+    onClickSave: ()-> Unit,
+    showDialog :Boolean,
+
 ){
     if (showDialog){
 
@@ -127,7 +106,8 @@ fun AddScreen(
             onSectionTitleValueChange = onSectionTitleValueChange,
             onSectionContentValueChange = onSectionContentValueChange,
             onConfirmNewSection = onConfirmNewSection,
-            onCancelSection = onCancelSection
+            onCancelSection = onCancelSection,
+
         )
     }
 
@@ -159,7 +139,7 @@ fun AddScreen(
 
             SpacerHeight(Paddings.smallPadding)
             TagsSection(
-                onTagClick = onTagClick
+                onClickTag = onClickTag
             )
             SpacerHeight(Paddings.mediumPadding)
             Divider(
@@ -172,6 +152,17 @@ fun AddScreen(
             SectionSection(
                 onClickAddSection = onClickAddSection
             )
+            Divider(
+                thickness = 5.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            SpacerHeight(Paddings.smallPadding)
+            CustomButton(
+                text = stringResource(id = R.string.save),
+                onClick = onClickSave
+            )
+
 
     }
 }
@@ -208,7 +199,7 @@ fun BlogImageSection(
 @Composable
 fun TagsSection(
     modifier: Modifier = Modifier,
-    onTagClick: (String,Boolean) -> Unit
+    onClickTag: (String,Boolean) -> Unit
 ) {
 
     val a = listOf("technology","social","art")
@@ -218,7 +209,7 @@ fun TagsSection(
         items(a.size) {
             SelectableTag(
                 text = a[it],
-                onClick = onTagClick
+                onClick = onClickTag
             )
         }
     }

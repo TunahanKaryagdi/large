@@ -2,7 +2,6 @@ package com.tunahankaryagdi.b_log.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.tunahankaryagdi.b_log.presentation.add.addScreen
