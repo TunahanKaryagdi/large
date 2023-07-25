@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.tunahankaryagdi.b_log.presentation.add.addScreen
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.login.loginScreen
@@ -34,5 +35,6 @@ fun NavigationHost(
 
         homeScreen()
 
+        addScreen()
     }
 }
