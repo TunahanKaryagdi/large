@@ -27,9 +27,9 @@ class AddViewModel @Inject constructor() : ViewModel() {
         _sectionUiState.value = _sectionUiState.value.copy(sectionContent = sectionContent)
     }
 
-    fun onConfirmNewSection(title: String, content: String){
+    fun onConfirmNewSection(content: String, type: Type){
 
-        val newSection = SectionUiState(sectionTitle = title, sectionContent = content)
+        val newSection = SectionUiState(sectionContent = content, type = type)
         _uiState.value = _uiState.value.copy(sections = _uiState.value.sections.addAndReturn(newSection), showDialog = false)
 
     }
@@ -53,11 +53,26 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
     }
 
+    fun onClickDropdownItem(type: Type){
+        _uiState.value = _uiState.value.copy(selectedType = type)
+    }
+
+    fun onDismiss(){
+        _uiState.value = _uiState.value.copy(isExpanded = false)
+    }
+
+    fun onExpand(isExpand :Boolean){
+        _uiState.value = _uiState.value.copy(isExpanded = isExpand)
+    }
+
+
     fun onClickSave(){
         println(_uiState.value.sections)
         println(_uiState.value.tags)
 
     }
+
+
 
     fun <T> MutableList<T>.addAndReturn(item : T) : MutableList<T>{
         this.add(item)
@@ -73,7 +88,9 @@ data class AddUiState(
     val tags: MutableList<String> = mutableListOf(),
     val sections: MutableList<SectionUiState> = mutableListOf(),
     val isPublished: Boolean = false,
-    val showDialog : Boolean = false
+    val showDialog : Boolean = false,
+    val isExpanded :Boolean = false,
+    val selectedType: Type = Type.Text
 
 )
 
@@ -81,5 +98,5 @@ data class SectionUiState(
     val sectionTitle: String = "",
     val sectionContent: String = "",
     val image: String = "" ,
-    val type :String = ""
+    val type :Type = Type.Text
 )

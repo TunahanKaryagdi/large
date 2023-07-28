@@ -10,7 +10,7 @@ val mainBlueLight = Color(0xFF283A61)
 //Arka plan
 val backgroundColorLight = Color(0xFFF9F4EC)
 val secondaryBlueLight = Color(0xFF000638)
-val darkTextColorLight = Color(0xFF000000)
+val mainDarkColorLight = Color(0xFF000000)
 val grayTextColorLight = Color(0xFF434343)
 val lightTextColorLight = Color(0xFFFFFFFF)
 

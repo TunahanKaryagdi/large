@@ -84,7 +84,6 @@ fun BlogCard(
     blog: Blog,
     screenWidth : Int = LocalConfiguration.current.screenWidthDp,
     screenHeight : Int = LocalConfiguration.current.screenHeightDp
-
 ) {
 
 
