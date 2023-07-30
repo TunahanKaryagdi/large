@@ -11,7 +11,7 @@ val mainBlueLight = Color(0xFF283A61)
 val backgroundColorLight = Color(0xFFF9F4EC)
 val secondaryBlueLight = Color(0xFF000638)
 val mainDarkColorLight = Color(0xFF000000)
-val grayTextColorLight = Color(0xFF434343)
+val grayTextColorLight = Color(0xFFD7DAD7)
 val lightTextColorLight = Color(0xFFFFFFFF)
 
 

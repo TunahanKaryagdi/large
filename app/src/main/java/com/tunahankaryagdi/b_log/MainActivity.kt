@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.tunahankaryagdi.b_log.presentation.add.addRoute
+import com.tunahankaryagdi.b_log.presentation.appstate.MainApp
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.login.LoginScreen
 import com.tunahankaryagdi.b_log.presentation.login.loginRoute
@@ -31,8 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    NavigationHost(navController = navController, startDestination = addRoute)
+                    MainApp()
                 }
             }
         }
