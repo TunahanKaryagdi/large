@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
+import com.tunahankaryagdi.b_log.presentation.login.loginRoute
 import com.tunahankaryagdi.b_log.presentation.navigation.NavigationHost
 import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
 

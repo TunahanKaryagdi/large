@@ -1,12 +1,12 @@
 package com.tunahankaryagdi.b_log.data.repository
 
-import com.tunahankaryagdi.b_log.data.model.Blog
 import com.tunahankaryagdi.b_log.data.model.BlogResponse
 import com.tunahankaryagdi.b_log.data.source.remote.BlogService
 import com.tunahankaryagdi.b_log.domain.repository.BlogRepository
 import javax.inject.Inject
 
-class BlogRepositoryImpl @Inject constructor(private val blogService: BlogService) : BlogRepository {
+class BlogRepositoryImpl @Inject constructor(private val blogService: BlogService) :
+    BlogRepository {
     override suspend fun getBlogs(): BlogResponse {
         return blogService.getBlogs()
     }

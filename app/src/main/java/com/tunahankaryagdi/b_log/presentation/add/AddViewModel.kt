@@ -15,62 +15,48 @@ class AddViewModel @Inject constructor() : ViewModel() {
     val sectionUiState = _sectionUiState
 
 
-    fun onTitleChange(title: String){
-        _uiState.value = _uiState.value.copy(title = title)
+    fun onSubtitleValueChange(value :String){
+        _sectionUiState.value = _sectionUiState.value.copy(sectionTitle = value)
     }
 
-    fun onSectionTitleChange(sectionTitle: String){
-        _sectionUiState.value = _sectionUiState.value.copy(sectionTitle = sectionTitle)
-    }
-
-    fun onSectionContentChange(sectionContent: String){
-        _sectionUiState.value = _sectionUiState.value.copy(sectionContent = sectionContent)
-    }
-
-    fun onConfirmNewSection(content: String, type: Type){
-
-        val newSection = SectionUiState(sectionContent = content, type = type)
-        _uiState.value = _uiState.value.copy(sections = _uiState.value.sections.addAndReturn(newSection), showDialog = false)
-
+    fun onContentValueChange(value :String){
+        _sectionUiState.value = _sectionUiState.value.copy(sectionContent = value)
     }
 
     fun onCancelSection(){
         _uiState.value = _uiState.value.copy(showDialog = false)
+        _sectionUiState.value = _sectionUiState.value.copy(sectionContent = "" , sectionTitle = "")
     }
 
-    fun onClickAddSection(){
-        _uiState.value = _uiState.value.copy(showDialog = true)
+    fun onClickAddButtons(type: Type){
+        _uiState.value = _uiState.value.copy(selectedType = type, showDialog = true)
     }
 
-    fun onClickTag(tagName: String, isSelected: Boolean){
-        val tagList = _uiState.value.tags
-        if (isSelected){
-            _uiState.value = _uiState.value.copy(tags = tagList.addAndReturn(tagName))
-            return
+
+    fun onConfirmNewSection(){
+
+        when(_uiState.value.selectedType){
+
+            Type.SubtitleAndContent->{
+                val newSection = SectionUiState(
+                    type = _uiState.value.selectedType,
+                    sectionTitle = _sectionUiState.value.sectionTitle,
+                    sectionContent = _sectionUiState.value.sectionContent
+                )
+                _uiState.value = _uiState.value.copy(sections = _uiState.value.sections.addAndReturn(newSection), showDialog = false)
+            }
+            else ->{
+                val newSection = SectionUiState(
+                    type = _uiState.value.selectedType,
+                    sectionTitle = _sectionUiState.value.sectionTitle,
+                    sectionContent = _sectionUiState.value.sectionContent
+                )
+                _uiState.value = _uiState.value.copy(sections = _uiState.value.sections.addAndReturn(newSection), showDialog = false)
+            }
         }
-        tagList.remove(tagName)
-        _uiState.value = _uiState.value.copy(tags = tagList)
-
+        _sectionUiState.value = _sectionUiState.value.copy(sectionContent = "" , sectionTitle = "")
     }
 
-    fun onClickDropdownItem(type: Type){
-        _uiState.value = _uiState.value.copy(selectedType = type)
-    }
-
-    fun onDismiss(){
-        _uiState.value = _uiState.value.copy(isExpanded = false)
-    }
-
-    fun onExpand(isExpand :Boolean){
-        _uiState.value = _uiState.value.copy(isExpanded = isExpand)
-    }
-
-
-    fun onClickSave(){
-        println(_uiState.value.sections)
-        println(_uiState.value.tags)
-
-    }
 
 
 
@@ -89,14 +75,11 @@ data class AddUiState(
     val sections: MutableList<SectionUiState> = mutableListOf(),
     val isPublished: Boolean = false,
     val showDialog : Boolean = false,
-    val isExpanded :Boolean = false,
     val selectedType: Type = Type.Text
-
 )
 
 data class SectionUiState(
     val sectionTitle: String = "",
     val sectionContent: String = "",
-    val image: String = "" ,
     val type :Type = Type.Text
 )
