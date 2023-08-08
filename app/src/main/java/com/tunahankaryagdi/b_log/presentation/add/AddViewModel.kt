@@ -15,6 +15,10 @@ class AddViewModel @Inject constructor() : ViewModel() {
     val sectionUiState = _sectionUiState
 
 
+    fun onTitleChange(value :String){
+        _uiState.value = _uiState.value.copy(title = value)
+    }
+
     fun onSubtitleValueChange(value :String){
         _sectionUiState.value = _sectionUiState.value.copy(sectionTitle = value)
     }
@@ -69,7 +73,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
 
 data class AddUiState(
-    val title: String = "",
+    val title: String = "Title",
     val image: String = "",
     val tags: MutableList<String> = mutableListOf(),
     val sections: MutableList<SectionUiState> = mutableListOf(),

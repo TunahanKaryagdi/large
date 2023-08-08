@@ -10,10 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.tunahankaryagdi.b_log.presentation.add.navigateToAdd
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
 import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
+import com.tunahankaryagdi.b_log.presentation.profile.navigateToProfile
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -60,7 +60,7 @@ class MainAppState(
 
         when (topLevelDestination) {
             TopLevelDestination.HOME -> navController.navigateToHome(topLevelOptions)
-            TopLevelDestination.ADD -> navController.navigateToAdd(topLevelOptions)
+            TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelOptions)
         }
     }
 

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
@@ -18,6 +20,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +32,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,8 +44,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
@@ -65,6 +77,7 @@ fun AddScreenRoute(
         modifier = modifier,
         uiState = uiState,
         sectionUiState = sectionUiState,
+        onTitleValueChange = viewModel::onTitleChange,
         onCancelSection =viewModel::onCancelSection ,
         onConfirm = viewModel::onConfirmNewSection,
         onClickAddButtons = viewModel::onClickAddButtons,
@@ -80,6 +93,7 @@ fun AddScreen(
     modifier: Modifier = Modifier,
     uiState: AddUiState,
     sectionUiState: SectionUiState,
+    onTitleValueChange: (String)->Unit,
     onCancelSection: () -> Unit,
     onConfirm: () -> Unit,
     onClickAddButtons: (Type) -> Unit,
@@ -94,6 +108,8 @@ fun AddScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
+                modifier = Modifier
+                    .padding(horizontal = Paddings.smallPadding),
                 title = {
 
                 },
@@ -101,10 +117,16 @@ fun AddScreen(
                     Image(imageVector = Icons.Default.Close, contentDescription = "close the add screen")
                 },
                 actions = {
-                    TextButton(onClick = { }) {
+                    TextButton(
+                        onClick = { },
+                        elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 5.dp)
+                    ) {
                         Text("Save")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
             )
         }
     ) {
@@ -117,7 +139,8 @@ fun AddScreen(
             onConfirm = onConfirm,
             onClickAddButtons = onClickAddButtons,
             onSubtitleValueChange =onSubtitleValueChange,
-            onContentValueChange =  onContentValueChange
+            onContentValueChange =  onContentValueChange,
+            onTitleValueChange = onTitleValueChange
         )
     }
 
@@ -131,6 +154,7 @@ fun AddScreenContent(
     modifier: Modifier = Modifier,
     uiState: AddUiState,
     sectionUiState: SectionUiState,
+    onTitleValueChange: (String)->Unit,
     onCancelSection: () -> Unit,
     onClickAddButtons :(Type)->Unit,
     onSubtitleValueChange : (String) -> Unit,
@@ -138,9 +162,7 @@ fun AddScreenContent(
     onConfirm : () -> Unit
 ){
 
-    var text by remember {
-        mutableStateOf("text")
-    }
+
 
     if (uiState.showDialog){
         SectionDialog(
@@ -168,11 +190,8 @@ fun AddScreenContent(
 
             item {
                 TextField(
-
-                    value = text,
-                    onValueChange = {
-                      text = it
-                    },
+                    value = uiState.title,
+                    onValueChange = onTitleValueChange,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textStyle = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
@@ -198,7 +217,6 @@ fun AddScreenContent(
                         )
                     }
                     Type.SubtitleAndContent ->{
-                        Column() {
                             Text(
                                 text = uiState.sections[index].sectionTitle,
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
@@ -208,7 +226,7 @@ fun AddScreenContent(
                                 style = MaterialTheme.typography.bodyMedium
 
                             )
-                        }
+
                     }
                     Type.Code ->{
                         
@@ -216,24 +234,32 @@ fun AddScreenContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.onSecondary, RectangleShape)
-                                .padding(Paddings.smallPadding)
+                                .padding(vertical = Paddings.smallPadding)
                         ) {
                             Text(
                                 text = uiState.sections[index].sectionContent,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
 
                     }
                     Type.Link ->{
-
+                        val url = uiState.sections[index].sectionContent
+                        val text  = buildAnnotatedString {
+                            append("URL: ")
+                            withStyle(style = SpanStyle(color = Color.Cyan), ) {
+                                pushStringAnnotation(tag = "URL", annotation = url )
+                                append(url)
+                            }
+                        }
+                        ClickableText(text = text , onClick = {})
                     }
                     Type.Image ->{
 
                     }
 
                 }
-
+                SpacerHeight(Paddings.smallPadding)
             }
         }
 
@@ -287,44 +313,74 @@ fun SectionDialog(
             when(selectedType){
 
                 Type.Text ->{
-                    OutlinedTextField(value = sectionContent, onValueChange = onContentValueChange )
+                    SectionTitle(text = "Add text")
+                    SpacerHeight(Paddings.smallPadding)
+                    TextField(
+                        value = sectionContent,
+                        onValueChange = onContentValueChange,
+                        textStyle = MaterialTheme.typography.bodyLarge,
+                        placeholder = {
+                            Text(text = "Text")
+                        }
+                    )
                 }
                 Type.SubtitleAndContent ->{
-                    Column() {
-                        OutlinedTextField(
-                            value = sectionTitle,
-                            onValueChange = onSubtitleValueChange,
-                            placeholder = {
-                                Text(text = stringResource(id = R.string.subtitle))
-                            }
-                        )
-                        SpacerHeight(Paddings.smallPadding)
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .wrapContentHeight(),
-
-                            value = sectionContent,
-                            onValueChange = onContentValueChange,
-                            placeholder = {
-                                          Text(text = stringResource(id = R.string.content))
-                            },
-                            maxLines = 5,
-                            singleLine = false
-                        )
-
-                    }
-                }
-                Type.Link ->{
-                    OutlinedTextField(value = sectionContent, onValueChange =onContentValueChange )
+                    SectionTitle(text = "Add subtitle and text")
+                    TextField(
+                        value = sectionTitle,
+                        onValueChange = onSubtitleValueChange,
+                        placeholder = {
+                            Text(text = "Subtitle")
+                        },
+                        singleLine = true
+                    )
+                    SpacerHeight(Paddings.smallPadding)
+                    TextField(
+                        value = sectionContent,
+                        onValueChange = onContentValueChange,
+                        placeholder = {
+                            Text(text = "Text")
+                        }
+                    )
 
                 }
                 Type.Code ->{
-                    OutlinedTextField(value = sectionContent, onValueChange =onContentValueChange )
+                    SectionTitle(text = "Add code part")
+                    SpacerHeight(Paddings.smallPadding)
+                    TextField(
+                        value = sectionContent,
+                        onValueChange = onContentValueChange,
+                        textStyle = MaterialTheme.typography.bodyLarge,
+                        maxLines = Int.MAX_VALUE,
+                        placeholder = {
+                            Text(text = "Code")
+                        }
+                    )
+
+                }
+                Type.Link ->{
+                    SectionTitle(text = "Add a link")
+                    SpacerHeight(Paddings.smallPadding)
+                    TextField(
+                        value = sectionContent,
+                        onValueChange = onContentValueChange,
+                        textStyle = MaterialTheme.typography.bodyLarge,
+                        singleLine = true,
+                        placeholder = {
+                            Text(text = "http://")
+                        }
+                    )
 
                 }
                 Type.Image ->{
-                    OutlinedTextField(value = sectionContent, onValueChange = onContentValueChange )
+                    ElevatedButton(onClick = { }) {
+                        Text(text = "From gallery")
+                    }
+                    SpacerHeight(Paddings.smallPadding)
 
+                    ElevatedButton(onClick = { }) {
+                        Text(text = "From camera")
+                    }
                 }
 
             }
@@ -349,6 +405,19 @@ fun SectionDialog(
                 Text(text = stringResource(id = R.string.cancel))
             }
         }
+    )
+}
+
+
+@Composable
+private fun SectionTitle(
+    modifier: Modifier = Modifier,
+    text : String
+) {
+    Text(
+        modifier  = modifier,
+        text = text,
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
     )
 }
 

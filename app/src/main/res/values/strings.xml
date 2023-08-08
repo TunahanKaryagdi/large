@@ -24,5 +24,6 @@
     <string name="add">Add</string>
     <string name="subtitle">Subtitle</string>
     <string name="content">Content</string>
+    <string name="profile">Profile</string>
 
 </resources>
