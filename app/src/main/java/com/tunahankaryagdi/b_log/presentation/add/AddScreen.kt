@@ -1,12 +1,22 @@
 package com.tunahankaryagdi.b_log.presentation.add
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +33,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,6 +47,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,14 +57,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.utils.Paddings
@@ -78,6 +94,7 @@ fun AddScreenRoute(
         uiState = uiState,
         sectionUiState = sectionUiState,
         onTitleValueChange = viewModel::onTitleChange,
+        onUriChange = viewModel::onUriChange,
         onCancelSection =viewModel::onCancelSection ,
         onConfirm = viewModel::onConfirmNewSection,
         onClickAddButtons = viewModel::onClickAddButtons,
@@ -94,12 +111,12 @@ fun AddScreen(
     uiState: AddUiState,
     sectionUiState: SectionUiState,
     onTitleValueChange: (String)->Unit,
+    onUriChange: (Uri?) ->Unit,
     onCancelSection: () -> Unit,
     onConfirm: () -> Unit,
     onClickAddButtons: (Type) -> Unit,
     onSubtitleValueChange: (String) -> Unit,
     onContentValueChange: (String) -> Unit
-
 
 ){
 
@@ -137,10 +154,11 @@ fun AddScreen(
             sectionUiState = sectionUiState,
             onCancelSection = onCancelSection ,
             onConfirm = onConfirm,
+            onTitleValueChange = onTitleValueChange,
+            onUriChange =  onUriChange,
             onClickAddButtons = onClickAddButtons,
             onSubtitleValueChange =onSubtitleValueChange,
-            onContentValueChange =  onContentValueChange,
-            onTitleValueChange = onTitleValueChange
+            onContentValueChange =  onContentValueChange
         )
     }
 
@@ -155,6 +173,7 @@ fun AddScreenContent(
     uiState: AddUiState,
     sectionUiState: SectionUiState,
     onTitleValueChange: (String)->Unit,
+    onUriChange: (Uri?) ->Unit,
     onCancelSection: () -> Unit,
     onClickAddButtons :(Type)->Unit,
     onSubtitleValueChange : (String) -> Unit,
@@ -180,6 +199,13 @@ fun AddScreenContent(
 
 
 
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult ={uri ->
+            onUriChange(uri)
+        }
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -194,7 +220,7 @@ fun AddScreenContent(
                     onValueChange = onTitleValueChange,
                     modifier = Modifier
                         .fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         textColor = Color.Black,
                         cursorColor = Color.Black,
@@ -202,8 +228,58 @@ fun AddScreenContent(
                         unfocusedBorderColor = Color.Transparent,
                         disabledBorderColor = Color.Transparent,
                         errorBorderColor = Color.Transparent,
-                    )
+                    ),
+
                 )
+            }
+            item {
+                if (uiState.selectedImage == null){
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(175.dp)
+                            .border(1.dp, MaterialTheme.colorScheme.primary)
+                            .clickable {
+                                photoPickerLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            }
+
+                    ){
+                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add a picture")
+                    }
+                    
+                }
+                else{
+
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .clickable {
+                                    onUriChange(null)
+                                }
+                        )
+                    }
+                    AsyncImage(
+                        model = uiState.selectedImage,
+                        contentDescription = "Image",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(175.dp),
+
+                    )
+                }
+                SpacerHeight(Paddings.smallPadding)
             }
 
             items(uiState.sections.size){index->
@@ -213,17 +289,17 @@ fun AddScreenContent(
                     Type.Text ->{
                         Text(
                             text = uiState.sections[index].sectionContent,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.titleMedium
                         )
                     }
                     Type.SubtitleAndContent ->{
                             Text(
                                 text = uiState.sections[index].sectionTitle,
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                             )
                             Text(
                                 text = uiState.sections[index].sectionContent,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.titleMedium
 
                             )
 
@@ -234,11 +310,11 @@ fun AddScreenContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.onSecondary, RectangleShape)
-                                .padding(vertical = Paddings.smallPadding)
+                                .padding(Paddings.smallPadding)
                         ) {
                             Text(
                                 text = uiState.sections[index].sectionContent,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = MaterialTheme.typography.titleMedium,
                             )
                         }
 
@@ -252,7 +328,11 @@ fun AddScreenContent(
                                 append(url)
                             }
                         }
-                        ClickableText(text = text , onClick = {})
+                        ClickableText(
+                            text = text ,
+                            onClick = {},
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                     Type.Image ->{
 
@@ -269,19 +349,19 @@ fun AddScreenContent(
         ) {
 
             IconButton(onClick = { onClickAddButtons(Type.Text) }) {
-                Image(imageVector = Icons.Default.Clear, contentDescription = "Text")
+                Image(painter = painterResource(id = R.drawable.ic_text), contentDescription = "Text")
             }
             IconButton(onClick = { onClickAddButtons(Type.SubtitleAndContent)}) {
-                Image(imageVector = Icons.Default.Edit, contentDescription = "Title content")
+                Image(painter = painterResource(id = R.drawable.ic_subtitle_and_text), contentDescription = "Title content")
             }
             IconButton(onClick = { onClickAddButtons(Type.Code) }) {
-                Image(imageVector = Icons.Default.AddCircle, contentDescription = "Code")
+                Image(painter = painterResource(id = R.drawable.ic_code), contentDescription = "Code")
             }
             IconButton(onClick = { onClickAddButtons(Type.Link)}) {
-                Image(imageVector = Icons.Default.Lock, contentDescription = "Link")
+                Image(painter = painterResource(id = R.drawable.ic_link), contentDescription = "Link")
             }
             IconButton(onClick = { onClickAddButtons(Type.Image)}) {
-                Image(imageVector = Icons.Default.Add, contentDescription = "Image")
+                Image(painter = painterResource(id = R.drawable.ic_image), contentDescription = "Image")
             }
         }
     }
@@ -384,10 +464,6 @@ fun SectionDialog(
                 }
 
             }
-
-
-
-
             }
         },
         confirmButton = {

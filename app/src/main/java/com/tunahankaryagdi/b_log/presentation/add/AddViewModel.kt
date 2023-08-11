@@ -1,5 +1,6 @@
 package com.tunahankaryagdi.b_log.presentation.add
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,10 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
     fun onTitleChange(value :String){
         _uiState.value = _uiState.value.copy(title = value)
+    }
+
+    fun onUriChange(uri: Uri?){
+        _uiState.value = _uiState.value.copy(selectedImage = uri)
     }
 
     fun onSubtitleValueChange(value :String){
@@ -74,7 +79,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
 data class AddUiState(
     val title: String = "Title",
-    val image: String = "",
+    val selectedImage: Uri? = null,
     val tags: MutableList<String> = mutableListOf(),
     val sections: MutableList<SectionUiState> = mutableListOf(),
     val isPublished: Boolean = false,
