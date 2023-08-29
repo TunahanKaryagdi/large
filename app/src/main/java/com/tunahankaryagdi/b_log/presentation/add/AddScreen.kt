@@ -131,14 +131,14 @@ fun AddScreen(
 
                 },
                 navigationIcon = {
-                    Image(imageVector = Icons.Default.Close, contentDescription = "close the add screen")
+                    Image(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
                 },
                 actions = {
                     TextButton(
                         onClick = { },
                         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 5.dp)
                     ) {
-                        Text("Save")
+                        Text(stringResource(id = R.string.save))
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -249,7 +249,9 @@ fun AddScreenContent(
                             }
 
                     ){
-                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add a picture")
+                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = stringResource(
+                            id = R.string.add_image
+                        ))
                     }
                     
                 }
@@ -262,7 +264,7 @@ fun AddScreenContent(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "",
+                            contentDescription = stringResource(id = R.string.cancel_image),
                             modifier = Modifier
                                 .clickable {
                                     onUriChange(null)
@@ -271,7 +273,7 @@ fun AddScreenContent(
                     }
                     AsyncImage(
                         model = uiState.selectedImage,
-                        contentDescription = "Image",
+                        contentDescription = stringResource(id = R.string.blog_image),
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -349,19 +351,29 @@ fun AddScreenContent(
         ) {
 
             IconButton(onClick = { onClickAddButtons(Type.Text) }) {
-                Image(painter = painterResource(id = R.drawable.ic_text), contentDescription = "Text")
+                Image(painter = painterResource(id = R.drawable.ic_text), contentDescription = stringResource(
+                    id = R.string.add_text
+                ))
             }
             IconButton(onClick = { onClickAddButtons(Type.SubtitleAndContent)}) {
-                Image(painter = painterResource(id = R.drawable.ic_subtitle_and_text), contentDescription = "Title content")
+                Image(painter = painterResource(id = R.drawable.ic_subtitle_and_text), contentDescription = stringResource(
+                    id = R.string.add_subtitle_and_text
+                ))
             }
             IconButton(onClick = { onClickAddButtons(Type.Code) }) {
-                Image(painter = painterResource(id = R.drawable.ic_code), contentDescription = "Code")
+                Image(painter = painterResource(id = R.drawable.ic_code), contentDescription = stringResource(
+                    id = R.string.add_a_code_part
+                ))
             }
             IconButton(onClick = { onClickAddButtons(Type.Link)}) {
-                Image(painter = painterResource(id = R.drawable.ic_link), contentDescription = "Link")
+                Image(painter = painterResource(id = R.drawable.ic_link), contentDescription = stringResource(
+                    id = R.string.add_a_link
+                ))
             }
             IconButton(onClick = { onClickAddButtons(Type.Image)}) {
-                Image(painter = painterResource(id = R.drawable.ic_image), contentDescription = "Image")
+                Image(painter = painterResource(id = R.drawable.ic_image), contentDescription = stringResource(
+                    id = R.string.add_image
+                ))
             }
         }
     }
@@ -393,24 +405,24 @@ fun SectionDialog(
             when(selectedType){
 
                 Type.Text ->{
-                    SectionTitle(text = "Add text")
+                    SectionTitle(text = stringResource(id = R.string.add_text))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
                         value = sectionContent,
                         onValueChange = onContentValueChange,
                         textStyle = MaterialTheme.typography.bodyLarge,
                         placeholder = {
-                            Text(text = "Text")
+                            Text(text = stringResource(id = R.string.text))
                         }
                     )
                 }
                 Type.SubtitleAndContent ->{
-                    SectionTitle(text = "Add subtitle and text")
+                    SectionTitle(text = stringResource(id = R.string.add_subtitle_and_text))
                     TextField(
                         value = sectionTitle,
                         onValueChange = onSubtitleValueChange,
                         placeholder = {
-                            Text(text = "Subtitle")
+                            Text(text = stringResource(id = R.string.subtitle))
                         },
                         singleLine = true
                     )
@@ -419,13 +431,13 @@ fun SectionDialog(
                         value = sectionContent,
                         onValueChange = onContentValueChange,
                         placeholder = {
-                            Text(text = "Text")
+                            Text(text = stringResource(id = R.string.text))
                         }
                     )
 
                 }
                 Type.Code ->{
-                    SectionTitle(text = "Add code part")
+                    SectionTitle(text = stringResource(id = R.string.add_a_code_part))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
                         value = sectionContent,
@@ -433,13 +445,13 @@ fun SectionDialog(
                         textStyle = MaterialTheme.typography.bodyLarge,
                         maxLines = Int.MAX_VALUE,
                         placeholder = {
-                            Text(text = "Code")
+                            Text(text = stringResource(id = R.string.code))
                         }
                     )
 
                 }
                 Type.Link ->{
-                    SectionTitle(text = "Add a link")
+                    SectionTitle(text = stringResource(id = R.string.add_a_link))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
                         value = sectionContent,
@@ -447,7 +459,7 @@ fun SectionDialog(
                         textStyle = MaterialTheme.typography.bodyLarge,
                         singleLine = true,
                         placeholder = {
-                            Text(text = "http://")
+                            Text(text = stringResource(id = R.string.http))
                         }
                     )
 

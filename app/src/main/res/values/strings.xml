@@ -25,5 +25,19 @@
     <string name="subtitle">Subtitle</string>
     <string name="content">Content</string>
     <string name="profile">Profile</string>
+    <string name="add_text">Add text</string>
+    <string name="add_subtitle_and_text">Add subtitle and text</string>
+    <string name="text">Text</string>
+    <string name="add_a_code_part">Add a code part</string>
+    <string name="code">Code</string>
+    <string name="add_a_link">Add a link</string>
+    <string name="http">http://</string>
+    <string name="close_screen">Close screen</string>
+    <string name="add_image">Add image</string>
+    <string name="cancel_image">Cancel image</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="follower">%d followers</string>
+    <string name="following">%d following</string>
+    <string name="edit_profile">Edit profile</string>
 
 </resources>
