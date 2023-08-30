@@ -51,7 +51,7 @@ fun LoginScreenRoute(
     LoginScreen(
         navigateToSignup = navigateToSignup,
         uiState = uiState,
-        onLoginClick = viewModel::login,
+        onClickLogin = viewModel::login,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange
     )
@@ -64,7 +64,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     uiState: LoginUiState,
     navigateToSignup : () -> Unit,
-    onLoginClick: ()-> Unit,
+    onClickLogin: ()-> Unit,
     onEmailChange: (String)->Unit,
     onPasswordChange: (String)->Unit,
 ) {
@@ -110,7 +110,7 @@ fun LoginScreen(
         CustomButton(
             modifier = Modifier.fillMaxWidth(),
             text = if (!uiState.isLoading) stringResource(id = R.string.login) else stringResource(id = R.string.loading),
-            onClick = onLoginClick
+            onClick = onClickLogin
         )
 
         SpacerHeight(dp = Paddings.mediumPadding)
@@ -134,7 +134,7 @@ private fun SignupSection(
         Text(
             text = stringResource(id = R.string.dont_have_acc),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSecondary
+            color = MaterialTheme.colorScheme.primary
         )
         SpacerWidth(dp = 2.dp)
         Text(

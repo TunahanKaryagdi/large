@@ -2,6 +2,7 @@ package com.tunahankaryagdi.b_log.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
 import com.tunahankaryagdi.b_log.domain.use_case.LoginUseCase
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ data class LoginUiState(
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase,private val authDataStore: AuthDataStore) : ViewModel() {
 
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState = _uiState
@@ -43,10 +44,13 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
             loginUseCase.invoke(_uiState.value.email,_uiState.value.password).collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
+                        val tokens = resource.data.data
+                        authDataStore.saveTokens(tokens.accessToken,tokens.refreshToken)
                         _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
                     }
 
                     is Resource.Error -> {
+                        resource.message
                         _uiState.value = _uiState.value.copy(isLoading = false)
 
                     }

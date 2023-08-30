@@ -48,7 +48,7 @@ fun MainApp(
     {
         NavigationHost(
             navController = appState.navController,
-            startDestination = homeRoute,
+            startDestination = loginRoute,
             modifier = modifier.padding(it)
         )
     }

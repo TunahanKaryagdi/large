@@ -69,6 +69,7 @@ fun HomeScreen(
             FloatingActionButton(
                 onClick = { navigateToAddScreen() },
                 containerColor = MaterialTheme.colorScheme.onSecondary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = CircleShape
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
