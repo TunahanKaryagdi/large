@@ -39,5 +39,6 @@
     <string name="follower">%d followers</string>
     <string name="following">%d following</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="empty_list">Blog List Empty</string>
 
 </resources>

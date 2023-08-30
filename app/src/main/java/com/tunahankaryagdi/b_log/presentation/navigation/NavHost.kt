@@ -10,10 +10,12 @@ import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
 import com.tunahankaryagdi.b_log.presentation.login.loginScreen
+import com.tunahankaryagdi.b_log.presentation.login.navigateToLogin
 import com.tunahankaryagdi.b_log.presentation.profile.profileScreen
 import com.tunahankaryagdi.b_log.presentation.signup.navigateToSignup
 import com.tunahankaryagdi.b_log.presentation.signup.signupRoute
 import com.tunahankaryagdi.b_log.presentation.signup.signupScreen
+import com.tunahankaryagdi.b_log.presentation.splash.splashScreen
 
 
 @Composable
@@ -43,5 +45,10 @@ fun NavigationHost(
         addScreen()
 
         profileScreen()
+
+        splashScreen(
+            navigateToHome = {navController.navigateToHome()},
+            navigateToLogin = {navController.navigateToLogin()}
+        )
     }
 }

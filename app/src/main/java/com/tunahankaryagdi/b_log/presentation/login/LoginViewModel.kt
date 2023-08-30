@@ -11,12 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-data class LoginUiState(
-    val email: String = "",
-    val password: String = "",
-    val isLoading: Boolean = false,
-    val navigateToMain: Boolean = false
-)
+
 
 
 @HiltViewModel
@@ -59,3 +54,10 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase,
         }
     }
 }
+
+data class LoginUiState(
+    val email: String = "",
+    val password: String = "",
+    val isLoading: Boolean = false,
+    val navigateToMain: Boolean = false
+)

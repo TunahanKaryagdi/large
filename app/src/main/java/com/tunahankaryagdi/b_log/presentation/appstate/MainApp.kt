@@ -20,6 +20,7 @@ import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.login.loginRoute
 import com.tunahankaryagdi.b_log.presentation.navigation.NavigationHost
 import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
+import com.tunahankaryagdi.b_log.presentation.splash.splashRoute
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,7 @@ fun MainApp(
     {
         NavigationHost(
             navController = appState.navController,
-            startDestination = loginRoute,
+            startDestination = splashRoute,
             modifier = modifier.padding(it)
         )
     }
