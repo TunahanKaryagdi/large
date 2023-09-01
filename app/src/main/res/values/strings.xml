@@ -40,5 +40,8 @@
     <string name="following">%d following</string>
     <string name="edit_profile">Edit profile</string>
     <string name="empty_list">Blog List Empty</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Log out</string>
+    <string name="are_you_sure">Log out of your account</string>
 
 </resources>

@@ -27,9 +27,11 @@ fun CustomTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
-            textColor = MaterialTheme.colorScheme.onSecondary
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
         ),
         leadingIcon = {
             Icon(imageVector = icon, contentDescription = stringResource(id = R.string.iconsof,label))

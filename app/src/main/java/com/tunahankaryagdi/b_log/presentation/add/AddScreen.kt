@@ -77,6 +77,7 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 enum class Type{
     Text,SubtitleAndContent,Image,Code,Link
 }
+//subtitle title ,text,image,code,link
 
 
 @Composable
@@ -131,7 +132,7 @@ fun AddScreen(
 
                 },
                 navigationIcon = {
-                    Image(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
+                    Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
                 },
                 actions = {
                     TextButton(
@@ -195,10 +196,6 @@ fun AddScreenContent(
         )
     }
 
-    //subtitle title ,text,image,code,link
-
-
-
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult ={uri ->
@@ -211,66 +208,35 @@ fun AddScreenContent(
             .fillMaxSize()
             .padding(horizontal = Paddings.smallPadding)
     ){
-
         LazyColumn() {
 
             item {
-                TextField(
-                    value = uiState.title,
-                    onValueChange = onTitleValueChange,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        cursorColor = Color.Black,
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        disabledBorderColor = Color.Transparent,
-                        errorBorderColor = Color.Transparent,
-                    ),
-
-                )
+                    TitleTextField(value = uiState.title, onTitleValueChange = onTitleValueChange)
             }
             item {
                 if (uiState.selectedImage == null){
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(175.dp)
-                            .border(1.dp, MaterialTheme.colorScheme.primary)
-                            .clickable {
+                        SelectImageSection (
+                            onClickAddImage = {
                                 photoPickerLauncher.launch(
                                     PickVisualMediaRequest(
                                         ActivityResultContracts.PickVisualMedia.ImageOnly
                                     )
                                 )
                             }
-
-                    ){
-                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = stringResource(
-                            id = R.string.add_image
-                        ))
-                    }
+                        )
                     
                 }
                 else{
 
-                    Row(
-                        horizontalArrangement = Arrangement.End,
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(id = R.string.cancel_image),
                         modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(id = R.string.cancel_image),
-                            modifier = Modifier
-                                .clickable {
-                                    onUriChange(null)
-                                }
-                        )
-                    }
+                            .align(Alignment.CenterEnd)
+                            .clickable {
+                                onUriChange(null)
+                            }
+                    )
                     AsyncImage(
                         model = uiState.selectedImage,
                         contentDescription = stringResource(id = R.string.blog_image),
@@ -380,7 +346,6 @@ fun AddScreenContent(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionDialog(
     modifier: Modifier = Modifier,
@@ -392,7 +357,6 @@ fun SectionDialog(
     onContentValueChange: (String) -> Unit,
     onConfirm : () -> Unit
 ) {
-
 
     AlertDialog(
         onDismissRequest = onCancelSection,
@@ -494,6 +458,54 @@ fun SectionDialog(
             }
         }
     )
+}
+@Composable
+private fun TitleTextField(
+    value :String,
+    onTitleValueChange : (String)->Unit
+){
+    TextField(
+        value = value,
+        onValueChange = onTitleValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent),
+        textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
+        colors = TextFieldDefaults.colors(
+            cursorColor = Color.Black,
+            focusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+
+            errorIndicatorColor = Color.Transparent,
+
+            )
+    )
+}
+
+@Composable
+private fun SelectImageSection(
+    onClickAddImage: ()->Unit
+){
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(175.dp)
+            .border(1.dp, MaterialTheme.colorScheme.primary)
+            .clickable {
+                onClickAddImage()
+            }
+
+    ){
+        Icon(imageVector = Icons.Default.AddCircle, contentDescription = stringResource(
+            id = R.string.add_image
+        ))
+    }
 }
 
 

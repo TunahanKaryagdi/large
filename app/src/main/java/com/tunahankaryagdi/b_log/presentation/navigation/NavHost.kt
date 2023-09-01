@@ -44,7 +44,9 @@ fun NavigationHost(
 
         addScreen()
 
-        profileScreen()
+        profileScreen(
+            navigateToLogin = {navController.navigateToLogin()}
+        )
 
         splashScreen(
             navigateToHome = {navController.navigateToHome()},

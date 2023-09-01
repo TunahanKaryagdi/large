@@ -2,27 +2,38 @@ package com.tunahankaryagdi.b_log.presentation.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
@@ -32,23 +43,117 @@ import com.tunahankaryagdi.b_log.utils.ProfileScreenTabs
 
 @Composable
 fun ProfileScreenRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = hiltViewModel(),
+    navigateToLogin: ()->Unit
 ) {
+
+
+    val uiState : ProfileUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
+    LaunchedEffect(key1 = viewModel.uiState ){
+        viewModel.uiState.collect{
+            if (it.navigateToLogin){
+                navigateToLogin()
+            }
+        }
+    }
+
     ProfileScreen(
-        modifier = modifier
+        modifier = modifier,
+        showBottomSheet = uiState.showBottomSheet,
+        showLogoutDialog = uiState.showLogoutDialog,
+        selectedTabIndex = uiState.selectedTabIndex,
+        onClickSettings = viewModel::onClickSettings,
+        onClickTab = viewModel::onClickTab,
+        onClickLogout = viewModel::onClickLogout,
+        onClickConfirmLogout = viewModel::onClickConfirmLogout,
+        onClickCancelLogout = viewModel::onClickCancelLogout
     )
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    showBottomSheet : Boolean,
+    showLogoutDialog: Boolean,
+    selectedTabIndex: Int,
+    onClickSettings :()->Unit,
+    onClickTab: (Int)->Unit,
+    onClickLogout: () -> Unit,
+    onClickConfirmLogout: () -> Unit,
+    onClickCancelLogout: () -> Unit
+){
 
-    var selectedIndex by remember{
-        mutableStateOf(0)
+
+
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                modifier = modifier
+                    .padding(horizontal = Paddings.smallPadding),
+                title = {},
+                actions = {
+                    Icon(
+                        modifier = Modifier
+                            .clickable {
+                                onClickSettings()
+                            },
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
+        }
+    ) {
+        ProfileScreenContent(
+            modifier = modifier.padding(it),
+            showBottomSheet = showBottomSheet,
+            showLogoutDialog =showLogoutDialog,
+            selectedTabIndex = selectedTabIndex,
+            onClickTab = onClickTab,
+            onClickLogout = onClickLogout,
+            onClickConfirmLogout = onClickConfirmLogout,
+            onClickCancelLogout = onClickCancelLogout
+        )
+
     }
 
+
+}
+
+
+
+@Composable
+fun ProfileScreenContent(
+    modifier: Modifier = Modifier,
+    showBottomSheet: Boolean,
+    showLogoutDialog: Boolean,
+    selectedTabIndex: Int,
+    onClickTab: (Int)->Unit,
+    onClickLogout: () -> Unit,
+    onClickConfirmLogout: () -> Unit,
+    onClickCancelLogout: () -> Unit
+) {
+
+
+    if (showBottomSheet){
+        BottomSheet(
+            onClickLogout = onClickLogout
+        )
+    }
+    if (showLogoutDialog){
+        LogoutDialog(
+            onClickConfirmLogout = onClickConfirmLogout,
+            onClickCancelLogout = onClickCancelLogout
+        )
+    }
 
     Column(
         modifier = modifier
@@ -58,31 +163,9 @@ fun ProfileScreen(
         SpacerHeight(Paddings.smallPadding)
         ProfileImageAndNameSection(name = "Tunahan", surname = "Karyağdı", follower = 10, following =5 )
         SpacerHeight(Paddings.smallPadding)
-
-        OutlinedButton(
-            modifier = Modifier.align(Alignment.End),
-            border = BorderStroke(width = 2.dp, MaterialTheme.colorScheme.primary),
-            onClick = { },
-        ) {
-            Text(text = stringResource(id = R.string.edit_profile),style = MaterialTheme.typography.titleMedium )
-        }
+        EditProfileButton(modifier = Modifier.align(Alignment.End))
         SpacerHeight(Paddings.smallPadding)
-
-        TabRow(
-            selectedTabIndex = selectedIndex,
-            containerColor = MaterialTheme.colorScheme.background,
-        ) {
-            ProfileScreenTabs.values().mapIndexed { index, profileScreenTabs ->
-                Tab(selected = selectedIndex == index,
-                    modifier = Modifier
-                        .padding(Paddings.smallPadding),
-
-                    onClick = { selectedIndex = index }
-                ) {
-                    Text(text = profileScreenTabs.name)
-                }
-            }
-        }
+        TabRow(selectedTabIndex = selectedTabIndex , onClickTab = onClickTab)
     }
 }
 
@@ -121,4 +204,92 @@ private fun ProfileImageAndNameSection(name: String, surname: String,follower: I
         }
     }
 }
+@Composable
+private fun EditProfileButton(modifier: Modifier= Modifier){
+    OutlinedButton(
+        modifier = modifier,
+        border = BorderStroke(width = 2.dp, MaterialTheme.colorScheme.primary),
+        onClick = { },
+    ) {
+        Text(text = stringResource(id = R.string.edit_profile),style = MaterialTheme.typography.titleMedium)
+    }
+}
+@Composable
+private fun TabRow(
+    selectedTabIndex: Int,
+    onClickTab: (Int) -> Unit
+){
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        containerColor = MaterialTheme.colorScheme.background,
+    ) {
+        ProfileScreenTabs.values().mapIndexed { index, profileScreenTabs ->
+            Tab(selected = selectedTabIndex == index,
+                modifier = Modifier
+                    .padding(Paddings.smallPadding),
+
+                onClick = { onClickTab(index) }
+            ) {
+                Text(text = profileScreenTabs.name)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BottomSheet(
+    modifier: Modifier = Modifier,
+    onClickLogout: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = { /*TODO*/ },
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.background,
+    ) {
+
+        TextButton(
+            onClick = {
+                onClickLogout()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+
+        ) {
+         Text(text = stringResource(id = R.string.logout))
+        }
+    }
+}
+@Composable
+private fun LogoutDialog(
+    modifier: Modifier = Modifier,
+    onClickConfirmLogout: () -> Unit,
+    onClickCancelLogout: () -> Unit
+){
+
+
+  AlertDialog(
+      title = {
+              Text(text = stringResource(id = R.string.logout))
+      },
+      confirmButton = {
+          TextButton(onClick = { onClickConfirmLogout() }) {
+              Text(text = stringResource(id = R.string.logout))
+          }
+      },
+      dismissButton = {
+          TextButton(onClick = { onClickCancelLogout()}) {
+              Text(text = stringResource(id = R.string.cancel))
+          }
+      },
+      text = {
+             Text(text = stringResource(id = R.string.are_you_sure))
+      },
+      onDismissRequest = {
+          onClickCancelLogout()
+      }
+  )
+}
+
+
 
