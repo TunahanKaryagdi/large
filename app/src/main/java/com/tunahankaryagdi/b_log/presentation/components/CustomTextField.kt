@@ -1,6 +1,5 @@
 package com.tunahankaryagdi.b_log.presentation.components
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -14,10 +13,10 @@ import androidx.compose.ui.res.stringResource
 import com.tunahankaryagdi.b_log.R
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
+    singleLine : Boolean = true,
     label: String,
     value : String,
     icon : ImageVector,
@@ -27,6 +26,7 @@ fun CustomTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        singleLine= singleLine,
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color.Transparent,
             errorContainerColor = Color.Transparent,

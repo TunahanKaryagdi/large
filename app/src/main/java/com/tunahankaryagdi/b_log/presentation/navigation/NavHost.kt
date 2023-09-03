@@ -36,7 +36,9 @@ fun NavigationHost(
             navigateToHome = {navController.navigateToHome()}
         )
 
-        signupScreen()
+        signupScreen(
+            navigateToLogin = {navController.navigateToLogin()}
+        )
 
         homeScreen(
             navigateToAddScreen = {navController.navigateToAdd()}

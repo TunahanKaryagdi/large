@@ -32,6 +32,7 @@ import com.tunahankaryagdi.b_log.utils.Paddings
 
 @Composable
 fun LoginScreenRoute(
+    modifier: Modifier = Modifier,
     navigateToSignup : () -> Unit,
     navigateToHome : ()-> Unit,
     viewModel: LoginViewModel = hiltViewModel()
@@ -64,9 +65,9 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     uiState: LoginUiState,
     navigateToSignup : () -> Unit,
-    onClickLogin: ()-> Unit,
     onEmailChange: (String)->Unit,
     onPasswordChange: (String)->Unit,
+    onClickLogin: ()-> Unit,
 ) {
 
     Column(

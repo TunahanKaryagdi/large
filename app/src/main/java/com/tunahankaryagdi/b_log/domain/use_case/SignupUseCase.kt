@@ -2,20 +2,21 @@ package com.tunahankaryagdi.b_log.domain.use_case
 
 import com.tunahankaryagdi.b_log.data.model.LoginRequest
 import com.tunahankaryagdi.b_log.data.model.LoginResponse
-import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
+import com.tunahankaryagdi.b_log.data.model.SignupRequest
+import com.tunahankaryagdi.b_log.data.model.SignupResponse
+import com.tunahankaryagdi.b_log.domain.repository.UserRepository
 import com.tunahankaryagdi.b_log.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+class SignupUseCase @Inject constructor(private val userRepository: UserRepository) {
 
-class LoginUseCase @Inject constructor(private val authRepository: AuthRepository){
-
-    operator fun invoke(email: String, password: String) : Flow<Resource<LoginResponse>> {
+    operator fun invoke(name: String,surname: String,email: String,password: String) : Flow<Resource<SignupResponse>> {
         return flow {
             try {
 
-                val response = authRepository.login(LoginRequest(email,password))
+                val response = userRepository.signup(SignupRequest(name,surname,email,password))
                 emit(Resource.Success(response))
 
             }
@@ -24,5 +25,4 @@ class LoginUseCase @Inject constructor(private val authRepository: AuthRepositor
             }
         }
     }
-
 }

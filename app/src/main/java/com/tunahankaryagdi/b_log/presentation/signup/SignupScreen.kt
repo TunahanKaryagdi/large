@@ -13,29 +13,60 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.CustomButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTextField
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
-import com.tunahankaryagdi.b_log.presentation.login.LoginScreen
 import com.tunahankaryagdi.b_log.utils.Paddings
 
 
 @Composable
-fun SignupScreenRoute() {
-    SignupScreen()
+fun SignupScreenRoute(
+    modifier: Modifier = Modifier,
+    navigateToLogin: ()->Unit,
+    viewModel: SignupViewModel = hiltViewModel()
+) {
+
+    val uiState : SignupUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = viewModel.uiState){
+        viewModel.uiState.collect{
+            if (it.navigateToLogin){
+                navigateToLogin()
+            }
+        }
+    }
+
+    SignupScreen(
+        modifier = modifier,
+        uiState = uiState,
+        onNameChange = viewModel::onNameChange,
+        onSurnameChange = viewModel::onSurnameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onClickSignup = viewModel::signup
+    )
 }
 
 
 
 @Composable
 fun SignupScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    uiState: SignupUiState,
+    onNameChange: (String)->Unit,
+    onSurnameChange: (String)->Unit,
+    onEmailChange: (String)->Unit,
+    onPasswordChange: (String)->Unit,
+    onClickSignup: ()->Unit
 ) {
 
     Column(
@@ -55,9 +86,9 @@ fun SignupScreen(
 
         CustomTextField(
             label = stringResource(id = R.string.name),
-            value = "",
+            value = uiState.name,
             icon = Icons.Default.Edit,
-            onValueChange = {},
+            onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -65,9 +96,9 @@ fun SignupScreen(
 
         CustomTextField(
             label = stringResource(id = R.string.surname),
-            value = "",
+            value = uiState.surname,
             icon = Icons.Default.Person,
-            onValueChange = {},
+            onValueChange = onSurnameChange,
             modifier = Modifier.fillMaxWidth()
 
         )
@@ -76,9 +107,9 @@ fun SignupScreen(
 
         CustomTextField(
             label = stringResource(id = R.string.email),
-            value = "",
+            value = uiState.email,
             icon = Icons.Default.Email,
-            onValueChange = {},
+            onValueChange = onEmailChange,
             modifier = Modifier.fillMaxWidth()
 
         )
@@ -86,9 +117,9 @@ fun SignupScreen(
 
         CustomTextField(
             label = stringResource(id = R.string.password),
-            value = "",
+            value = uiState.password,
             icon = Icons.Default.Lock,
-            onValueChange = {},
+            onValueChange = onPasswordChange,
             modifier = Modifier.fillMaxWidth()
 
         )
@@ -97,8 +128,8 @@ fun SignupScreen(
 
         CustomButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.signup),
-            onClick = {}
+            text = if (!uiState.isLoading) stringResource(id = R.string.signup) else stringResource(id = R.string.loading),
+            onClick = onClickSignup
         )
 
     }

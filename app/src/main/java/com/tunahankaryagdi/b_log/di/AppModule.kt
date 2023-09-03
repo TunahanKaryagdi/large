@@ -3,11 +3,14 @@ package com.tunahankaryagdi.b_log.di
 import android.content.Context
 import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.BlogRepositoryImpl
+import com.tunahankaryagdi.b_log.data.repository.UserRepositoryImpl
 import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
 import com.tunahankaryagdi.b_log.data.source.remote.AuthService
 import com.tunahankaryagdi.b_log.data.source.remote.BlogService
+import com.tunahankaryagdi.b_log.data.source.remote.UserService
 import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.domain.repository.BlogRepository
+import com.tunahankaryagdi.b_log.domain.repository.UserRepository
 import com.tunahankaryagdi.b_log.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -59,6 +62,18 @@ object AppModule {
         return BlogRepositoryImpl(blogService)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideUserService(retrofit: Retrofit) :UserService{
+        return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(userService: UserService) : UserRepository{
+        return UserRepositoryImpl(userService)
+    }
 
     @Provides
     @Singleton

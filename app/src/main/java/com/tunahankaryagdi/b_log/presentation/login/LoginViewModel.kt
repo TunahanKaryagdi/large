@@ -40,13 +40,12 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase,
                 when (resource) {
                     is Resource.Success -> {
                         val tokens = resource.data.data
-                        authDataStore.saveTokens(tokens.accessToken,tokens.refreshToken)
-                        _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true)
+                        authDataStore.saveTokens(tokens ?.accessToken ?: "",tokens?.refreshToken ?: "")
+                        _uiState.value = _uiState.value.copy(isLoading = false, navigateToMain = true, message = resource.data.message)
                     }
 
                     is Resource.Error -> {
-                        resource.message
-                        _uiState.value = _uiState.value.copy(isLoading = false)
+                        _uiState.value = _uiState.value.copy(isLoading = false, message = resource.message)
 
                     }
                 }
@@ -59,5 +58,6 @@ data class LoginUiState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
-    val navigateToMain: Boolean = false
+    val navigateToMain: Boolean = false,
+    val message: String = ""
 )
