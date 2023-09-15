@@ -17,8 +17,12 @@ fun NavController.navigateToDetail(
 }
 
 
-fun NavGraphBuilder.detailScreen(){
+fun NavGraphBuilder.detailScreen(
+    navigateToComments:(String)->Unit
+){
     composable("$detailRoute/{blogId}"){
-        DetailScreenRoute()
+        DetailScreenRoute(
+            navigateToComments = navigateToComments
+        )
     }
 }

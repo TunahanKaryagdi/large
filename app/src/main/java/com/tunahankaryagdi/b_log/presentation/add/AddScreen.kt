@@ -53,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 import com.tunahankaryagdi.b_log.utils.SectionTypes
@@ -85,7 +86,6 @@ fun AddScreenRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(
 
@@ -106,12 +106,7 @@ fun AddScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                modifier = Modifier
-                    .padding(horizontal = Paddings.smallPadding),
-                title = {
-
-                },
+            CustomTopAppBar(
                 navigationIcon = {
                     Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
                 },
@@ -122,10 +117,7 @@ fun AddScreen(
                     ) {
                         Text(stringResource(id = R.string.save))
                     }
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
+                }
             )
         }
     ) {
@@ -148,7 +140,6 @@ fun AddScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreenContent(
     modifier: Modifier = Modifier,

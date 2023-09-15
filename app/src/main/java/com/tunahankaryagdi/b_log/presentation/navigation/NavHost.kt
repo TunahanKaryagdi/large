@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.tunahankaryagdi.b_log.presentation.add.addScreen
 import com.tunahankaryagdi.b_log.presentation.add.navigateToAdd
+import com.tunahankaryagdi.b_log.presentation.comments.commentsScreen
+import com.tunahankaryagdi.b_log.presentation.comments.navigateToComments
 import com.tunahankaryagdi.b_log.presentation.detail.detailScreen
 import com.tunahankaryagdi.b_log.presentation.detail.navigateToDetail
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
@@ -58,7 +60,10 @@ fun NavigationHost(
             navigateToLogin = {navController.navigateToLogin()}
         )
 
+        detailScreen(
+            navigateToComments = {navController.navigateToComments(it)}
+        )
 
-        detailScreen()
+        commentsScreen()
     }
 }

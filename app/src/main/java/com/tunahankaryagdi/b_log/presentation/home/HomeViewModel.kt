@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(private val getBlogsUseCase: GetBlogsUse
                     }
 
                     is Resource.Error -> {
-                        _uiState.value = _uiState.value.copy(isLoading = false)
+                        _uiState.value = _uiState.value.copy(isLoading = false, error = resource.message)
                     }
 
                 }
@@ -53,5 +53,6 @@ class HomeViewModel @Inject constructor(private val getBlogsUseCase: GetBlogsUse
 data class HomeUiState(
     val isLoading: Boolean = false,
     val blogs: List<Blog> = emptyList(),
+    val error: String = "",
     val navigateToDetail: Boolean = false
 )

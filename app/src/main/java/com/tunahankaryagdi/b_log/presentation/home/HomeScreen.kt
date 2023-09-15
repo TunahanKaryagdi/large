@@ -46,6 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.Blog
+import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
+import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
@@ -85,11 +87,11 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navigateToAddScreen() },
-                containerColor = MaterialTheme.colorScheme.onSecondary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = CircleShape
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.add))
             }
         }
     ){
@@ -113,10 +115,18 @@ fun HomeScreenContent(
     uiState: HomeUiState,
     navigateToDetailScreen: (String) -> Unit
 ) {
-    if (uiState.blogs.isEmpty()){
-        EmptyContent()
+    
+    if (uiState.isLoading){
+        CustomCircularIndicator()
     }
-
+    if (uiState.error.isNotBlank()){
+        CustomErrorMessage(message = uiState.error)
+    }
+    
+    if (uiState.blogs.isEmpty() && uiState.error.isBlank()){
+        CustomErrorMessage(message = stringResource(id = R.string.empty_list))
+    }
+    
 
     LazyColumn(
         modifier = modifier
@@ -188,6 +198,7 @@ fun BlogCard(
                 )
                 SpacerWidth(Paddings.extraSmallPadding)
                 Text(text = "${blog.author.firstName} ${blog.author.lastName}")
+                
             }
             SpacerHeight(Paddings.smallPadding)
             Row(
@@ -231,16 +242,6 @@ fun BlogCard(
     }
 }
 
-@Composable
-private fun EmptyContent(modifier: Modifier = Modifier){
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Text(text = stringResource(id = R.string.empty_list), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold))
-    }
-}
 
 
 

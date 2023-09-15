@@ -21,6 +21,6 @@ fun CustomErrorMessage(
         contentAlignment = Alignment.Center
     ){
 
-        Text(text = message, style = MaterialTheme.typography.bodyMedium )
+        Text(text = message, style = MaterialTheme.typography.bodyLarge )
     }
 }

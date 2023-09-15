@@ -2,6 +2,7 @@ package com.tunahankaryagdi.b_log.presentation.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.BlogDetail
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
+import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.home.HomeUiState
@@ -53,7 +55,8 @@ import com.tunahankaryagdi.b_log.utils.SectionTypes
 @Composable
 fun DetailScreenRoute(
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(),
+    navigateToComments: (String) -> Unit
 ) {
 
 
@@ -61,30 +64,35 @@ fun DetailScreenRoute(
 
 
     DetailScreen(
-        uiState = uiState
+        uiState = uiState,
+        navigateToComments = navigateToComments
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
-    uiState: DetailUiState
+    uiState: DetailUiState,
+    navigateToComments: (String) ->Unit
 ) {
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                modifier = modifier
-                    .padding(horizontal = Paddings.smallPadding),
-                title = {},
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
+            CustomTopAppBar(
                 navigationIcon = {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back))
+                },
+                actions = {
+                    Icon(
+                        modifier = Modifier
+                            .clickable {
+                                navigateToComments(uiState.blogDetail?.id ?: "")
+                            },
+                        painter = painterResource(id = R.drawable.ic_comment),
+                        contentDescription = stringResource(id = R.string.comments))
                 }
+                
             )
         }
     ) {

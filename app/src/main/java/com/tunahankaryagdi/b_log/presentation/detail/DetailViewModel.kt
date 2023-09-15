@@ -32,7 +32,7 @@ class DetailViewModel @Inject constructor(
     }
 
 
-    fun getBlogDetailById(id: String){
+    private fun getBlogDetailById(id: String){
 
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)

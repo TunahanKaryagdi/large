@@ -35,7 +35,6 @@ class ProfileViewModel @Inject constructor(private val authDataStore: AuthDataSt
         viewModelScope.launch {
             authDataStore.saveTokens("","")
             _uiState.value = _uiState.value.copy(navigateToLogin = true)
-
         }
     }
 

@@ -46,5 +46,6 @@
     <string name="follow">Follow</string>
     <string name="back">Back</string>
     <string name="updated_at">Updated %s</string>
+    <string name="comments">Comments</string>
 
 </resources>

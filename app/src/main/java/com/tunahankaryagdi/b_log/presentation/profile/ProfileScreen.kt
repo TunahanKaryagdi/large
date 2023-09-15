@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
+import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
@@ -75,7 +76,6 @@ fun ProfileScreenRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
@@ -95,10 +95,7 @@ fun ProfileScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                modifier = modifier
-                    .padding(horizontal = Paddings.smallPadding),
-                title = {},
+            CustomTopAppBar(
                 actions = {
                     Icon(
                         modifier = Modifier
@@ -108,10 +105,7 @@ fun ProfileScreen(
                         imageVector = Icons.Default.Settings,
                         contentDescription = stringResource(id = R.string.settings)
                     )
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                }
             )
         }
     ) {
@@ -215,16 +209,7 @@ private fun ProfileImageAndNameSection(name: String, surname: String,follower: I
         }
     }
 }
-@Composable
-private fun EditProfileButton(modifier: Modifier= Modifier){
-    OutlinedButton(
-        modifier = modifier,
-        border = BorderStroke(width = 2.dp, MaterialTheme.colorScheme.primary),
-        onClick = { },
-    ) {
-        Text(text = stringResource(id = R.string.edit_profile),style = MaterialTheme.typography.titleMedium)
-    }
-}
+
 @Composable
 private fun TabRow(
     selectedTabIndex: Int,

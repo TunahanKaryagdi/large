@@ -27,14 +27,7 @@ data class BlogDto(
     val updatedAt: String
 )
 
-data class CommentDto(
-    val blogId: String,
-    val content: String,
-    val createdAt: String,
-    val id: String,
-    val updatedAt: String,
-    val userId: String
-)
+
 
 data class LikeDto(
     val id: String,

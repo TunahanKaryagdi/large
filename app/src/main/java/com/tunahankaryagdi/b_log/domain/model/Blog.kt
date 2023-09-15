@@ -2,7 +2,6 @@ package com.tunahankaryagdi.b_log.domain.model
 
 import com.tunahankaryagdi.b_log.data.model.AuthorDto
 import com.tunahankaryagdi.b_log.data.model.BlogDto
-import com.tunahankaryagdi.b_log.data.model.CommentDto
 import com.tunahankaryagdi.b_log.data.model.LikeDto
 import com.tunahankaryagdi.b_log.data.model.SectionDto
 
@@ -13,43 +12,9 @@ data class Blog(
     val image: String,
     val title: String,
     val tags: List<String>,
-    val updatedAt : String
+    val updatedAt : String,
+    val likes : List<Like>
 )
-
-data class Section(
-    val content: String,
-    val id: String,
-    val image: String,
-    val title: String,
-    val type :String
-)
-
-data class Author(
-    val id : String,
-    val firstName: String,
-    val lastName: String,
-    val email: String
-)
-
-data class Comment(
-    val blogId: String,
-    val content: String,
-    val createdAt: String,
-    val id: String,
-    val updatedAt: String,
-    val userId: String
-)
-
-
-data class Like(
-    val id: String,
-    val blogId: String,
-    val userId: String
-)
-
-
-
-
 fun BlogDto.toBlog() : Blog{
     return Blog(
         id = this.id,
@@ -57,10 +22,17 @@ fun BlogDto.toBlog() : Blog{
         image = this.image,
         title = this.title,
         tags = this.tags,
-        updatedAt = this.updatedAt
+        updatedAt = this.updatedAt,
+        likes = this.likes.map { it.toLike() }
     )
 }
-
+data class Section(
+    val content: String,
+    val id: String,
+    val image: String,
+    val title: String,
+    val type :String
+)
 
 fun SectionDto.toSection() :Section{
     return Section(
@@ -71,7 +43,12 @@ fun SectionDto.toSection() :Section{
         type = this.type
     )
 }
-
+data class Author(
+    val id : String,
+    val firstName: String,
+    val lastName: String,
+    val email: String
+)
 
 fun AuthorDto.toAuthor():Author{
     return  Author(
@@ -82,16 +59,12 @@ fun AuthorDto.toAuthor():Author{
     )
 }
 
-fun CommentDto.toComment() : Comment {
-    return Comment(
-        id = this.id,
-        blogId = this.blogId,
-        userId = this.userId,
-        createdAt = this.createdAt,
-        updatedAt = this.updatedAt,
-        content = this.content
-    )
-}
+data class Like(
+    val id: String,
+    val blogId: String,
+    val userId: String
+)
+
 
 fun LikeDto.toLike() : Like{
     return Like(
