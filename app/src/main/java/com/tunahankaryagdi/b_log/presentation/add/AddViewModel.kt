@@ -2,6 +2,7 @@ package com.tunahankaryagdi.b_log.presentation.add
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.tunahankaryagdi.b_log.utils.SectionTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
         _sectionUiState.value = _sectionUiState.value.copy(sectionContent = "" , sectionTitle = "")
     }
 
-    fun onClickAddButtons(type: Type){
+    fun onClickAddButtons(type: SectionTypes){
         _uiState.value = _uiState.value.copy(selectedType = type, showDialog = true)
     }
 
@@ -46,7 +47,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
         when(_uiState.value.selectedType){
 
-            Type.SubtitleAndContent->{
+            SectionTypes.TITLE_TEXT->{
                 val newSection = SectionUiState(
                     type = _uiState.value.selectedType,
                     sectionTitle = _sectionUiState.value.sectionTitle,
@@ -67,12 +68,11 @@ class AddViewModel @Inject constructor() : ViewModel() {
     }
 
 
-
-
     fun <T> MutableList<T>.addAndReturn(item : T) : MutableList<T>{
         this.add(item)
         return this
     }
+
 
 }
 
@@ -84,11 +84,11 @@ data class AddUiState(
     val sections: MutableList<SectionUiState> = mutableListOf(),
     val isPublished: Boolean = false,
     val showDialog : Boolean = false,
-    val selectedType: Type = Type.Text
+    val selectedType: SectionTypes = SectionTypes.TEXT
 )
 
 data class SectionUiState(
     val sectionTitle: String = "",
     val sectionContent: String = "",
-    val type :Type = Type.Text
+    val type :SectionTypes = SectionTypes.TEXT
 )

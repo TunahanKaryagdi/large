@@ -1,4 +1,4 @@
-package com.tunahankaryagdi.b_log.utils
+package com.tunahankaryagdi.b_log.presentation.utils
 
 import androidx.compose.ui.unit.dp
 

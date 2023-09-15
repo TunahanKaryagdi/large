@@ -24,8 +24,8 @@ class SplashViewModel @Inject constructor(private val authDataStore: AuthDataSto
             delay(2000)
             authDataStore.getAccessToken.collect{token->
                 if(token.isNotBlank()){
+
                     _uiState.value = _uiState.value.copy(token =token, navigateToHome = true)
-                    _uiState.value.token
                 }
                 else{
                     _uiState.value = _uiState.value.copy( navigateToLogin = true)
@@ -40,7 +40,7 @@ class SplashViewModel @Inject constructor(private val authDataStore: AuthDataSto
 
 
 data class SplashUiState(
-    val navigateToHome :Boolean =false,
-    val navigateToLogin: Boolean= false,
-    val token :String =""
+    val navigateToHome :Boolean = false,
+    val navigateToLogin: Boolean = false,
+    val token :String = ""
 )

@@ -1,19 +1,23 @@
 package com.tunahankaryagdi.b_log.presentation.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,13 +27,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,34 +45,39 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.data.model.Blog
+import com.tunahankaryagdi.b_log.domain.model.Blog
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
-import com.tunahankaryagdi.b_log.utils.Paddings
+import com.tunahankaryagdi.b_log.presentation.utils.Paddings
+import com.tunahankaryagdi.b_log.utils.DateHelper
 
 
 @Composable
 fun HomeScreenRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToAddScreen: () -> Unit
+    navigateToAddScreen: () -> Unit,
+    navigateToDetailScreen: (String) -> Unit
 ) {
 
     val uiState : HomeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+
+
     HomeScreen(
         modifier = modifier,
         uiState = uiState,
-        navigateToAddScreen = navigateToAddScreen
+        navigateToAddScreen = navigateToAddScreen,
+        navigateToDetailScreen = navigateToDetailScreen
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     navigateToAddScreen: ()->Unit,
+    navigateToDetailScreen: (String) -> Unit
 ){
 
     Scaffold(
@@ -83,7 +96,8 @@ fun HomeScreen(
 
         HomeScreenContent(
             modifier = modifier.padding(it),
-            uiState = uiState
+            uiState = uiState,
+            navigateToDetailScreen = navigateToDetailScreen
         )
     }
 
@@ -97,10 +111,12 @@ fun HomeScreen(
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
+    navigateToDetailScreen: (String) -> Unit
 ) {
     if (uiState.blogs.isEmpty()){
         EmptyContent()
     }
+
 
     LazyColumn(
         modifier = modifier
@@ -109,16 +125,21 @@ fun HomeScreenContent(
     ){
 
 
+
             item {
                 SpacerHeight(Paddings.smallPadding)
             }
             items(uiState.blogs.size){
-                BlogCard(blog = uiState.blogs[it])
+                BlogCard(
+                    blog = uiState.blogs[it],
+                    navigateToDetailScreen = navigateToDetailScreen
+                )
                 SpacerHeight(Paddings.smallPadding)
             }
 
 
     }
+
 
 
 }
@@ -127,100 +148,91 @@ fun HomeScreenContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BlogCard(
-    modifier :Modifier = Modifier,
+    modifier: Modifier = Modifier,
+    profileImageSize: Int = 30,
+    blogImageSize: Int = 80,
     blog: Blog,
-    screenWidth : Int = LocalConfiguration.current.screenWidthDp,
-    screenHeight : Int = LocalConfiguration.current.screenHeightDp
+    navigateToDetailScreen: (String) -> Unit
 ) {
-
-
 
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        onClick = { },
+        onClick = { navigateToDetailScreen(blog.id) },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = Paddings.smallPadding)
-
+        shape = RectangleShape,
+        elevation = CardDefaults.cardElevation(defaultElevation = Paddings.extraSmallPadding)
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(Paddings.smallPadding)
+    ) {
 
-        ) {
+        Column() {
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Image(
+                    modifier = Modifier
+                        .size(profileImageSize.dp)
+                        .clip(CircleShape),
 
-           Image(
-               painter = painterResource(id = R.drawable.ic_launcher_background),
-               contentDescription = blog.title,
-               contentScale = ContentScale.FillWidth,
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .height((screenHeight / 7f).dp)
-           )
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = stringResource(
+                        id = R.string.profile_image
+                    )
+                )
+                SpacerWidth(Paddings.extraSmallPadding)
+                Text(text = "${blog.author.firstName} ${blog.author.lastName}")
+            }
             SpacerHeight(Paddings.smallPadding)
-            Column(
+            Row(
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Paddings.smallPadding)
             ){
-                Text(
-                    text = blog.tags[0],
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+                Image(
+                    modifier = modifier
+                        .size(blogImageSize.dp)
+                        .weight(1f),
+                    contentScale = ContentScale.FillWidth,
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = stringResource(id = R.string.blog_image),
                 )
-                SpacerHeight(Paddings.smallPadding)
-                Text(
-                    text = blog.title,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                SpacerHeight(Paddings.smallPadding)
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-
-                    ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "Profile Image",
-                        modifier = Modifier
-                            .size((screenWidth / 10f).dp)
-                            .clip(CircleShape)                       // clip to the circle shape
-                            .border(2.dp, Color.Gray, CircleShape)
-                    )
-                    SpacerWidth(Paddings.smallPadding)
+                SpacerWidth(Paddings.smallPadding)
+                Column(
+                    modifier = modifier
+                        .weight(2f)
+                ) {
                     Text(
-                        text = "Name Surname",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    SpacerWidth(Paddings.smallPadding)
-                    Text(
-                        text = "x",
-                        style = MaterialTheme.typography.bodyMedium
+                        text = blog.title,
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = blog.updatedAt,
+                        text = DateHelper.calculateDateDifference(blog.updatedAt),
                         style = MaterialTheme.typography.bodyMedium
-
                     )
                 }
+
             }
-
             SpacerHeight(Paddings.smallPadding)
-
-
-
-
-
+            LazyRow(){
+                items(blog.tags.size){
+                    Text(text = blog.tags[it])
+                }
+            }
         }
 
+    }
     }
 }
 
 @Composable
-private fun EmptyContent(modifier: Modifier= Modifier){
+private fun EmptyContent(modifier: Modifier = Modifier){
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -229,4 +241,9 @@ private fun EmptyContent(modifier: Modifier= Modifier){
         Text(text = stringResource(id = R.string.empty_list), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold))
     }
 }
+
+
+
+
+
 

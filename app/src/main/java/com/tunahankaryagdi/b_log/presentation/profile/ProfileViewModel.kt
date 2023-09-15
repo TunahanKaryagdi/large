@@ -3,7 +3,6 @@ package com.tunahankaryagdi.b_log.presentation.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
-import com.tunahankaryagdi.b_log.presentation.splash.SplashUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -17,15 +16,16 @@ class ProfileViewModel @Inject constructor(private val authDataStore: AuthDataSt
 
 
 
-
     fun onClickLogout(){
         _uiState.value = _uiState.value.copy(showLogoutDialog = true)
 
     }
 
     fun onClickSettings(){
+
         _uiState.value = _uiState.value.copy(showBottomSheet = true)
     }
+
 
     fun onClickTab(selectedIndex: Int){
         _uiState.value = _uiState.value.copy(selectedTabIndex = selectedIndex)
@@ -40,7 +40,11 @@ class ProfileViewModel @Inject constructor(private val authDataStore: AuthDataSt
     }
 
     fun onClickCancelLogout(){
-        _uiState.value = _uiState.value.copy(showLogoutDialog = false)
+        _uiState.value = _uiState.value.copy(showLogoutDialog = false, showBottomSheet = false)
+    }
+
+    fun onDismissBottomSheet(){
+        _uiState.value = _uiState.value.copy(showBottomSheet = false)
     }
 }
 

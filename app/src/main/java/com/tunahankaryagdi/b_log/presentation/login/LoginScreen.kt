@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.presentation.components.CustomButton
+import com.tunahankaryagdi.b_log.presentation.components.CustomPrimaryButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTextField
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
-import com.tunahankaryagdi.b_log.utils.Paddings
+import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 
 
 @Composable
@@ -108,7 +108,7 @@ fun LoginScreen(
 
         SpacerHeight(dp = Paddings.mediumPadding)
 
-        CustomButton(
+        CustomPrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = if (!uiState.isLoading) stringResource(id = R.string.login) else stringResource(id = R.string.loading),
             onClick = onClickLogin

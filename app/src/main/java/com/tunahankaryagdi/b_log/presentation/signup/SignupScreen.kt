@@ -22,10 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.presentation.components.CustomButton
+import com.tunahankaryagdi.b_log.presentation.components.CustomPrimaryButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTextField
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
-import com.tunahankaryagdi.b_log.utils.Paddings
+import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 
 
 @Composable
@@ -126,7 +126,7 @@ fun SignupScreen(
 
         SpacerHeight(dp = Paddings.mediumPadding)
 
-        CustomButton(
+        CustomPrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = if (!uiState.isLoading) stringResource(id = R.string.signup) else stringResource(id = R.string.loading),
             onClick = onClickSignup

@@ -2,15 +2,12 @@ package com.tunahankaryagdi.b_log.presentation.add
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,17 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -36,7 +27,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -44,19 +34,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,12 +54,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
-import com.tunahankaryagdi.b_log.utils.Paddings
+import com.tunahankaryagdi.b_log.presentation.utils.Paddings
+import com.tunahankaryagdi.b_log.utils.SectionTypes
 
 
-enum class Type{
-    Text,SubtitleAndContent,Image,Code,Link
-}
 //subtitle title ,text,image,code,link
 
 
@@ -115,7 +96,7 @@ fun AddScreen(
     onUriChange: (Uri?) ->Unit,
     onCancelSection: () -> Unit,
     onConfirm: () -> Unit,
-    onClickAddButtons: (Type) -> Unit,
+    onClickAddButtons: (SectionTypes) -> Unit,
     onSubtitleValueChange: (String) -> Unit,
     onContentValueChange: (String) -> Unit
 
@@ -176,7 +157,7 @@ fun AddScreenContent(
     onTitleValueChange: (String)->Unit,
     onUriChange: (Uri?) ->Unit,
     onCancelSection: () -> Unit,
-    onClickAddButtons :(Type)->Unit,
+    onClickAddButtons :(SectionTypes)->Unit,
     onSubtitleValueChange : (String) -> Unit,
     onContentValueChange : (String) -> Unit,
     onConfirm : () -> Unit
@@ -254,13 +235,13 @@ fun AddScreenContent(
 
                 when(uiState.sections[index].type){
 
-                    Type.Text ->{
+                    SectionTypes.TEXT ->{
                         Text(
                             text = uiState.sections[index].sectionContent,
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                    Type.SubtitleAndContent ->{
+                    SectionTypes.TITLE_TEXT ->{
                             Text(
                                 text = uiState.sections[index].sectionTitle,
                                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
@@ -272,7 +253,7 @@ fun AddScreenContent(
                             )
 
                     }
-                    Type.Code ->{
+                    SectionTypes.CODE ->{
                         
                         Box(
                             modifier = Modifier
@@ -287,7 +268,7 @@ fun AddScreenContent(
                         }
 
                     }
-                    Type.Link ->{
+                    SectionTypes.LINK ->{
                         val url = uiState.sections[index].sectionContent
                         val text  = buildAnnotatedString {
                             append("URL: ")
@@ -302,7 +283,7 @@ fun AddScreenContent(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                    Type.Image ->{
+                    SectionTypes.IMAGE ->{
 
                     }
 
@@ -316,27 +297,27 @@ fun AddScreenContent(
                 .align(Alignment.BottomCenter)
         ) {
 
-            IconButton(onClick = { onClickAddButtons(Type.Text) }) {
+            IconButton(onClick = { onClickAddButtons(SectionTypes.TEXT) }) {
                 Image(painter = painterResource(id = R.drawable.ic_text), contentDescription = stringResource(
                     id = R.string.add_text
                 ))
             }
-            IconButton(onClick = { onClickAddButtons(Type.SubtitleAndContent)}) {
+            IconButton(onClick = { onClickAddButtons(SectionTypes.TITLE_TEXT)}) {
                 Image(painter = painterResource(id = R.drawable.ic_subtitle_and_text), contentDescription = stringResource(
                     id = R.string.add_subtitle_and_text
                 ))
             }
-            IconButton(onClick = { onClickAddButtons(Type.Code) }) {
+            IconButton(onClick = { onClickAddButtons(SectionTypes.CODE) }) {
                 Image(painter = painterResource(id = R.drawable.ic_code), contentDescription = stringResource(
                     id = R.string.add_a_code_part
                 ))
             }
-            IconButton(onClick = { onClickAddButtons(Type.Link)}) {
+            IconButton(onClick = { onClickAddButtons(SectionTypes.LINK)}) {
                 Image(painter = painterResource(id = R.drawable.ic_link), contentDescription = stringResource(
                     id = R.string.add_a_link
                 ))
             }
-            IconButton(onClick = { onClickAddButtons(Type.Image)}) {
+            IconButton(onClick = { onClickAddButtons(SectionTypes.IMAGE)}) {
                 Image(painter = painterResource(id = R.drawable.ic_image), contentDescription = stringResource(
                     id = R.string.add_image
                 ))
@@ -351,7 +332,7 @@ fun SectionDialog(
     modifier: Modifier = Modifier,
     sectionTitle :String,
     sectionContent: String,
-    selectedType: Type,
+    selectedType: SectionTypes,
     onCancelSection: () -> Unit,
     onSubtitleValueChange : (String) ->Unit,
     onContentValueChange: (String) -> Unit,
@@ -368,7 +349,7 @@ fun SectionDialog(
 
             when(selectedType){
 
-                Type.Text ->{
+                SectionTypes.TEXT ->{
                     SectionTitle(text = stringResource(id = R.string.add_text))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
@@ -380,7 +361,7 @@ fun SectionDialog(
                         }
                     )
                 }
-                Type.SubtitleAndContent ->{
+                SectionTypes.TITLE_TEXT ->{
                     SectionTitle(text = stringResource(id = R.string.add_subtitle_and_text))
                     TextField(
                         value = sectionTitle,
@@ -400,7 +381,7 @@ fun SectionDialog(
                     )
 
                 }
-                Type.Code ->{
+                SectionTypes.CODE ->{
                     SectionTitle(text = stringResource(id = R.string.add_a_code_part))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
@@ -414,7 +395,7 @@ fun SectionDialog(
                     )
 
                 }
-                Type.Link ->{
+                SectionTypes.LINK ->{
                     SectionTitle(text = stringResource(id = R.string.add_a_link))
                     SpacerHeight(Paddings.smallPadding)
                     TextField(
@@ -428,7 +409,7 @@ fun SectionDialog(
                     )
 
                 }
-                Type.Image ->{
+                SectionTypes.IMAGE ->{
                     ElevatedButton(onClick = { }) {
                         Text(text = "From gallery")
                     }

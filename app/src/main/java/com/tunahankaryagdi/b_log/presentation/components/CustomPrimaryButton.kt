@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CustomButton(
+fun CustomPrimaryButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: ()-> Unit

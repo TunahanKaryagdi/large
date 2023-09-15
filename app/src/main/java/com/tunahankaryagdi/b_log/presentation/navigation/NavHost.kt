@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.tunahankaryagdi.b_log.presentation.add.addScreen
 import com.tunahankaryagdi.b_log.presentation.add.navigateToAdd
+import com.tunahankaryagdi.b_log.presentation.detail.detailScreen
+import com.tunahankaryagdi.b_log.presentation.detail.navigateToDetail
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
@@ -41,7 +43,8 @@ fun NavigationHost(
         )
 
         homeScreen(
-            navigateToAddScreen = {navController.navigateToAdd()}
+            navigateToAddScreen = {navController.navigateToAdd()},
+            navigateToDetailScreen = {navController.navigateToDetail(it)}
         )
 
         addScreen()
@@ -54,5 +57,8 @@ fun NavigationHost(
             navigateToHome = {navController.navigateToHome()},
             navigateToLogin = {navController.navigateToLogin()}
         )
+
+
+        detailScreen()
     }
 }

@@ -35,9 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
-import com.tunahankaryagdi.b_log.utils.Paddings
+import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 import com.tunahankaryagdi.b_log.utils.ProfileScreenTabs
 
 
@@ -69,7 +70,8 @@ fun ProfileScreenRoute(
         onClickTab = viewModel::onClickTab,
         onClickLogout = viewModel::onClickLogout,
         onClickConfirmLogout = viewModel::onClickConfirmLogout,
-        onClickCancelLogout = viewModel::onClickCancelLogout
+        onClickCancelLogout = viewModel::onClickCancelLogout,
+        onDismissBottomSheet = viewModel::onDismissBottomSheet
     )
 }
 
@@ -84,7 +86,8 @@ fun ProfileScreen(
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
     onClickConfirmLogout: () -> Unit,
-    onClickCancelLogout: () -> Unit
+    onClickCancelLogout: () -> Unit,
+    onDismissBottomSheet: () -> Unit
 ){
 
 
@@ -120,7 +123,8 @@ fun ProfileScreen(
             onClickTab = onClickTab,
             onClickLogout = onClickLogout,
             onClickConfirmLogout = onClickConfirmLogout,
-            onClickCancelLogout = onClickCancelLogout
+            onClickCancelLogout = onClickCancelLogout,
+            onDismissBottomSheet = onDismissBottomSheet
         )
 
     }
@@ -139,13 +143,15 @@ fun ProfileScreenContent(
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
     onClickConfirmLogout: () -> Unit,
-    onClickCancelLogout: () -> Unit
+    onClickCancelLogout: () -> Unit,
+    onDismissBottomSheet: () -> Unit
 ) {
 
 
     if (showBottomSheet){
         BottomSheet(
-            onClickLogout = onClickLogout
+            onClickLogout = onClickLogout,
+            onDismissBottomSheet = onDismissBottomSheet
         )
     }
     if (showLogoutDialog){
@@ -163,7 +169,12 @@ fun ProfileScreenContent(
         SpacerHeight(Paddings.smallPadding)
         ProfileImageAndNameSection(name = "Tunahan", surname = "Karyağdı", follower = 10, following =5 )
         SpacerHeight(Paddings.smallPadding)
-        EditProfileButton(modifier = Modifier.align(Alignment.End))
+        CustomOutlinedButton(
+            modifier = Modifier
+                .align(Alignment.End),
+            onClick = {},
+            text = stringResource(id = R.string.edit_profile)
+        )
         SpacerHeight(Paddings.smallPadding)
         TabRow(selectedTabIndex = selectedTabIndex , onClickTab = onClickTab)
     }
@@ -240,10 +251,11 @@ private fun TabRow(
 @Composable
 private fun BottomSheet(
     modifier: Modifier = Modifier,
-    onClickLogout: () -> Unit
+    onClickLogout: () -> Unit,
+    onDismissBottomSheet: ()->Unit,
 ) {
     ModalBottomSheet(
-        onDismissRequest = { /*TODO*/ },
+        onDismissRequest = { onDismissBottomSheet() },
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.background,
     ) {

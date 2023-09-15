@@ -3,12 +3,12 @@ package com.tunahankaryagdi.b_log.data.model
 import com.google.gson.annotations.SerializedName
 
 data class SignupResponse(
-    val data: SignupData? =null,
+    val data: SignupDto? =null,
     val message: String
 )
 
 
-data class SignupData(
+data class SignupDto(
     val email: String,
     @SerializedName("first_name")
     val firstName: String,
