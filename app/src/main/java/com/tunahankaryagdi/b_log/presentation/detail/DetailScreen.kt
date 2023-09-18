@@ -15,13 +15,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,13 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.domain.model.BlogDetail
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
-import com.tunahankaryagdi.b_log.presentation.home.HomeUiState
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 import com.tunahankaryagdi.b_log.utils.DateHelper
 import com.tunahankaryagdi.b_log.utils.SectionTypes

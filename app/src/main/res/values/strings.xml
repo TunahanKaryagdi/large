@@ -39,7 +39,7 @@
     <string name="follower">%d followers</string>
     <string name="following">%d following</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="empty_list">Blog List Empty</string>
+    <string name="empty_blog_list">Blog List Empty</string>
     <string name="settings">Settings</string>
     <string name="logout">Log out</string>
     <string name="are_you_sure">Log out of your account</string>
@@ -47,5 +47,8 @@
     <string name="back">Back</string>
     <string name="updated_at">Updated %s</string>
     <string name="comments">Comments</string>
+    <string name="send">Send</string>
+    <string name="whats_comment">What is your comment?</string>
+    <string name="no_comment_yet">No comment yet</string>
 
 </resources>

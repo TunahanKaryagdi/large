@@ -3,13 +3,16 @@ package com.tunahankaryagdi.b_log.di
 import android.content.Context
 import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.BlogRepositoryImpl
+import com.tunahankaryagdi.b_log.data.repository.CommentRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.UserRepositoryImpl
 import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
 import com.tunahankaryagdi.b_log.data.source.remote.AuthService
 import com.tunahankaryagdi.b_log.data.source.remote.BlogService
+import com.tunahankaryagdi.b_log.data.source.remote.CommentService
 import com.tunahankaryagdi.b_log.data.source.remote.UserService
 import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.domain.repository.BlogRepository
+import com.tunahankaryagdi.b_log.domain.repository.CommentRepository
 import com.tunahankaryagdi.b_log.domain.repository.UserRepository
 import com.tunahankaryagdi.b_log.utils.Constants.BASE_URL
 import dagger.Module
@@ -73,6 +76,18 @@ object AppModule {
     @Singleton
     fun provideUserRepository(userService: UserService) : UserRepository{
         return UserRepositoryImpl(userService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCommentService(retrofit: Retrofit): CommentService{
+        return retrofit.create(CommentService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCommentRepository(commentService: CommentService) : CommentRepository{
+        return CommentRepositoryImpl(commentService)
     }
 
     @Provides

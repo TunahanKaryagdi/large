@@ -124,7 +124,7 @@ fun HomeScreenContent(
     }
     
     if (uiState.blogs.isEmpty() && uiState.error.isBlank()){
-        CustomErrorMessage(message = stringResource(id = R.string.empty_list))
+        CustomErrorMessage(message = stringResource(id = R.string.empty_blog_list))
     }
     
 
