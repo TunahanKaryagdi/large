@@ -96,4 +96,10 @@ object AppModule {
         return AuthDataStore(context)
     }
 
+    @Provides
+    @Singleton
+    fun provideApplication() : MyApplication{
+        return MyApplication()
+    }
+
 }

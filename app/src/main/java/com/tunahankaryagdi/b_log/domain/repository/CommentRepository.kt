@@ -1,6 +1,6 @@
 package com.tunahankaryagdi.b_log.domain.repository
 
-import com.tunahankaryagdi.b_log.data.model.CommentResponse
+import com.tunahankaryagdi.b_log.data.model.comment.CommentResponse
 
 interface CommentRepository {
 

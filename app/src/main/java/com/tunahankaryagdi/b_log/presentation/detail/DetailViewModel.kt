@@ -3,10 +3,9 @@ package com.tunahankaryagdi.b_log.presentation.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahankaryagdi.b_log.domain.model.BlogDetail
-import com.tunahankaryagdi.b_log.domain.model.toBlogDetail
+import com.tunahankaryagdi.b_log.domain.model.blog.BlogDetail
+import com.tunahankaryagdi.b_log.domain.model.blog.toBlogDetail
 import com.tunahankaryagdi.b_log.domain.use_case.GetBlogByIdUseCase
-import com.tunahankaryagdi.b_log.presentation.login.LoginUiState
 import com.tunahankaryagdi.b_log.utils.Constants
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +28,7 @@ class DetailViewModel @Inject constructor(
         savedStateHandle.get<String>(Constants.BLOG_ID)?.let { blogId ->
             getBlogDetailById(blogId)
         }
+
     }
 
 

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.domain.model.Comment
+import com.tunahankaryagdi.b_log.domain.model.comment.Comment
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar

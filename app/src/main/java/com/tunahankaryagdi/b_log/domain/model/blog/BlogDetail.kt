@@ -1,10 +1,10 @@
-package com.tunahankaryagdi.b_log.domain.model
+package com.tunahankaryagdi.b_log.domain.model.blog
 
 import com.google.gson.annotations.SerializedName
-import com.tunahankaryagdi.b_log.data.model.AuthorDetailDto
-import com.tunahankaryagdi.b_log.data.model.BlogDetailDto
-import com.tunahankaryagdi.b_log.data.model.LikeDetailDto
-import com.tunahankaryagdi.b_log.data.model.SectionDetailDto
+import com.tunahankaryagdi.b_log.data.model.blog.AuthorDetailDto
+import com.tunahankaryagdi.b_log.data.model.blog.BlogDetailDto
+import com.tunahankaryagdi.b_log.data.model.blog.LikeDetailDto
+import com.tunahankaryagdi.b_log.data.model.blog.SectionDetailDto
 
 
 data class BlogDetail(
@@ -21,7 +21,7 @@ data class BlogDetail(
     val updatedAt: String
 )
 
-fun BlogDetailDto.toBlogDetail() : BlogDetail{
+fun BlogDetailDto.toBlogDetail() : BlogDetail {
     return BlogDetail(
         id = this.id,
         author = this.author.toAuthorDetail(),
@@ -47,7 +47,7 @@ data class AuthorDetail(
     val email: String
 )
 
-fun AuthorDetailDto.toAuthorDetail() :AuthorDetail{
+fun AuthorDetailDto.toAuthorDetail() : AuthorDetail {
     return AuthorDetail(
         id = this.id,
         firstName = this.firstName,
@@ -62,7 +62,7 @@ data class LikeDetail(
     val userId: String
 )
 
-fun LikeDetailDto.toLikeDetail() :LikeDetail{
+fun LikeDetailDto.toLikeDetail() : LikeDetail {
     return LikeDetail(
         id = this.id,
         blogId = this.blogId,
@@ -79,7 +79,7 @@ data class SectionDetail(
     val type: String
 )
 
-fun SectionDetailDto.toSectionDetail() : SectionDetail{
+fun SectionDetailDto.toSectionDetail() : SectionDetail {
     return SectionDetail(
         blogId = this.blogId,
         id = this.id,

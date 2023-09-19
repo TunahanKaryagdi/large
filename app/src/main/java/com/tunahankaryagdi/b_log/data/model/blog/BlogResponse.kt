@@ -1,32 +1,41 @@
-package com.tunahankaryagdi.b_log.data.model
+package com.tunahankaryagdi.b_log.data.model.blog
 
 import com.google.gson.annotations.SerializedName
 
-data class BlogDetailResponse(
+
+data class BlogResponse(
     @SerializedName("data")
-    val blogDetail: BlogDetailDto,
+    val blogs: List<BlogDto>,
     val message: String,
     val status: Int
 )
 
-data class BlogDetailDto(
-    val author: AuthorDetailDto,
+
+data class BlogDto(
+    val author: AuthorDto,
     val authorId: String,
     val createdAt: String,
     val id: String,
     val image: String,
-    val likes: List<LikeDetailDto>,
+    val likes: List<LikeDto>,
     val published: Boolean,
     @SerializedName("searchable_text")
     val searchableText: String,
-    val sections: List<SectionDetailDto>,
+    val sections: List<SectionDto>,
     val tags: List<String>,
     val title: String,
     val updatedAt: String
 )
 
 
-data class SectionDetailDto(
+
+data class LikeDto(
+    val id: String,
+    val blogId: String,
+    val userId: String
+)
+
+data class SectionDto(
     val blogId: String,
     val content: String,
     val id: String,
@@ -35,18 +44,11 @@ data class SectionDetailDto(
     val type: String
 )
 
-
-data class AuthorDetailDto(
-    val email: String,
+data class AuthorDto(
+    val id : String,
     @SerializedName("first_name")
     val firstName: String,
-    val id: String,
     @SerializedName("last_name")
-    val lastName: String
-)
-
-data class LikeDetailDto(
-    val id: String,
-    val blogId: String,
-    val userId: String
+    val lastName: String,
+    val email: String
 )

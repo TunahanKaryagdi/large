@@ -1,7 +1,7 @@
 package com.tunahankaryagdi.b_log.domain.repository
 
-import com.tunahankaryagdi.b_log.data.model.BlogDetailResponse
-import com.tunahankaryagdi.b_log.data.model.BlogResponse
+import com.tunahankaryagdi.b_log.data.model.blog.BlogDetailResponse
+import com.tunahankaryagdi.b_log.data.model.blog.BlogResponse
 
 interface BlogRepository {
 

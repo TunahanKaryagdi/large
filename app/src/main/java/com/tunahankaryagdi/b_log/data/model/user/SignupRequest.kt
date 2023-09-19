@@ -1,4 +1,4 @@
-package com.tunahankaryagdi.b_log.data.model
+package com.tunahankaryagdi.b_log.data.model.user
 
 import com.google.gson.annotations.SerializedName
 

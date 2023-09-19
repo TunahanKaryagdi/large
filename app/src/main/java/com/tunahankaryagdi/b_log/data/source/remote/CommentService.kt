@@ -1,6 +1,6 @@
 package com.tunahankaryagdi.b_log.data.source.remote
 
-import com.tunahankaryagdi.b_log.data.model.CommentResponse
+import com.tunahankaryagdi.b_log.data.model.comment.CommentResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

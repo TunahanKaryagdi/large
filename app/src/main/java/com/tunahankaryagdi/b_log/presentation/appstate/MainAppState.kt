@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.tunahankaryagdi.b_log.presentation.detail.navigateToDetail
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
 import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
@@ -38,7 +37,6 @@ class MainAppState(
 
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
-
 
 
     val topLevelDestinations = TopLevelDestination.values().toList()

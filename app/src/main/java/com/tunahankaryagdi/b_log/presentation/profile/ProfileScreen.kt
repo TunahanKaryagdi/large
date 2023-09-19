@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
+import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
@@ -64,9 +66,7 @@ fun ProfileScreenRoute(
 
     ProfileScreen(
         modifier = modifier,
-        showBottomSheet = uiState.showBottomSheet,
-        showLogoutDialog = uiState.showLogoutDialog,
-        selectedTabIndex = uiState.selectedTabIndex,
+        uiState = uiState,
         onClickSettings = viewModel::onClickSettings,
         onClickTab = viewModel::onClickTab,
         onClickLogout = viewModel::onClickLogout,
@@ -79,9 +79,7 @@ fun ProfileScreenRoute(
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    showBottomSheet : Boolean,
-    showLogoutDialog: Boolean,
-    selectedTabIndex: Int,
+    uiState: ProfileUiState,
     onClickSettings :()->Unit,
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
@@ -111,9 +109,7 @@ fun ProfileScreen(
     ) {
         ProfileScreenContent(
             modifier = modifier.padding(it),
-            showBottomSheet = showBottomSheet,
-            showLogoutDialog =showLogoutDialog,
-            selectedTabIndex = selectedTabIndex,
+            uiState = uiState,
             onClickTab = onClickTab,
             onClickLogout = onClickLogout,
             onClickConfirmLogout = onClickConfirmLogout,
@@ -131,9 +127,7 @@ fun ProfileScreen(
 @Composable
 fun ProfileScreenContent(
     modifier: Modifier = Modifier,
-    showBottomSheet: Boolean,
-    showLogoutDialog: Boolean,
-    selectedTabIndex: Int,
+    uiState: ProfileUiState,
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
     onClickConfirmLogout: () -> Unit,
@@ -141,37 +135,46 @@ fun ProfileScreenContent(
     onDismissBottomSheet: () -> Unit
 ) {
 
-
-    if (showBottomSheet){
+    if (uiState.isLoading){
+        CustomCircularIndicator()
+    }
+    if (uiState.error.isNotBlank()){
+        CustomErrorMessage(message = uiState.error)
+    }
+    if (uiState.showBottomSheet){
         BottomSheet(
             onClickLogout = onClickLogout,
             onDismissBottomSheet = onDismissBottomSheet
         )
     }
-    if (showLogoutDialog){
+    if (uiState.showLogoutDialog){
         LogoutDialog(
             onClickConfirmLogout = onClickConfirmLogout,
             onClickCancelLogout = onClickCancelLogout
         )
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = Paddings.smallPadding)
-    ) {
-        SpacerHeight(Paddings.smallPadding)
-        ProfileImageAndNameSection(name = "Tunahan", surname = "Karyağdı", follower = 10, following =5 )
-        SpacerHeight(Paddings.smallPadding)
-        CustomOutlinedButton(
-            modifier = Modifier
-                .align(Alignment.End),
-            onClick = {},
-            text = stringResource(id = R.string.edit_profile)
-        )
-        SpacerHeight(Paddings.smallPadding)
-        TabRow(selectedTabIndex = selectedTabIndex , onClickTab = onClickTab)
+    uiState.user?.let {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = Paddings.smallPadding)
+        ) {
+            SpacerHeight(Paddings.smallPadding)
+            ProfileImageAndNameSection(name = uiState.user.firstName, surname = uiState.user.lastName, follower = 10, following =5 )
+            SpacerHeight(Paddings.smallPadding)
+            CustomOutlinedButton(
+                modifier = Modifier
+                    .align(Alignment.End),
+                onClick = {},
+                text = stringResource(id = R.string.edit_profile)
+            )
+            SpacerHeight(Paddings.smallPadding)
+            TabRow(selectedTabIndex = uiState.selectedTabIndex , onClickTab = onClickTab)
+        }
     }
+
+
 }
 
 

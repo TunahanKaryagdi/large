@@ -1,9 +1,9 @@
-package com.tunahankaryagdi.b_log.domain.model
+package com.tunahankaryagdi.b_log.domain.model.blog
 
-import com.tunahankaryagdi.b_log.data.model.AuthorDto
-import com.tunahankaryagdi.b_log.data.model.BlogDto
-import com.tunahankaryagdi.b_log.data.model.LikeDto
-import com.tunahankaryagdi.b_log.data.model.SectionDto
+import com.tunahankaryagdi.b_log.data.model.blog.AuthorDto
+import com.tunahankaryagdi.b_log.data.model.blog.BlogDto
+import com.tunahankaryagdi.b_log.data.model.blog.LikeDto
+import com.tunahankaryagdi.b_log.data.model.blog.SectionDto
 
 
 data class Blog(
@@ -15,7 +15,7 @@ data class Blog(
     val updatedAt : String,
     val likes : List<Like>
 )
-fun BlogDto.toBlog() : Blog{
+fun BlogDto.toBlog() : Blog {
     return Blog(
         id = this.id,
         author = this.author.toAuthor(),
@@ -34,7 +34,7 @@ data class Section(
     val type :String
 )
 
-fun SectionDto.toSection() :Section{
+fun SectionDto.toSection() : Section {
     return Section(
         content = this.content,
         id = this.id,
@@ -50,7 +50,7 @@ data class Author(
     val email: String
 )
 
-fun AuthorDto.toAuthor():Author{
+fun AuthorDto.toAuthor(): Author {
     return  Author(
         id = this.id,
         firstName =this.firstName,
@@ -66,7 +66,7 @@ data class Like(
 )
 
 
-fun LikeDto.toLike() : Like{
+fun LikeDto.toLike() : Like {
     return Like(
         id = this.id,
         blogId = this.blogId,

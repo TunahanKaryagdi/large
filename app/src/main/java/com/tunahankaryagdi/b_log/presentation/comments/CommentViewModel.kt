@@ -3,16 +3,13 @@ package com.tunahankaryagdi.b_log.presentation.comments
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahankaryagdi.b_log.domain.model.Comment
-import com.tunahankaryagdi.b_log.domain.model.toComment
+import com.tunahankaryagdi.b_log.domain.model.comment.Comment
+import com.tunahankaryagdi.b_log.domain.model.comment.toComment
 import com.tunahankaryagdi.b_log.domain.use_case.GetCommentsByBlogIdUseCase
-import com.tunahankaryagdi.b_log.presentation.detail.DetailUiState
 import com.tunahankaryagdi.b_log.utils.Constants
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

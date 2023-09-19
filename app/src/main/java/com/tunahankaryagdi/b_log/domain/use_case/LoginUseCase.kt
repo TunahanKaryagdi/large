@@ -1,7 +1,7 @@
 package com.tunahankaryagdi.b_log.domain.use_case
 
-import com.tunahankaryagdi.b_log.data.model.LoginRequest
-import com.tunahankaryagdi.b_log.data.model.LoginResponse
+import com.tunahankaryagdi.b_log.data.model.auth.LoginRequest
+import com.tunahankaryagdi.b_log.data.model.auth.LoginResponse
 import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.utils.Resource
 import kotlinx.coroutines.flow.Flow

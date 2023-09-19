@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.tunahankaryagdi.b_log.presentation.appstate.rememberMainAppState
 
 
 const val homeRoute = "home"
