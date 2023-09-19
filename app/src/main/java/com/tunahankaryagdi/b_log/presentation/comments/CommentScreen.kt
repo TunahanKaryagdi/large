@@ -2,6 +2,7 @@ package com.tunahankaryagdi.b_log.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,7 +56,8 @@ fun CommentsScreenRoute(
     CommentsScreen(
         modifier = modifier,
         uiState = uiState,
-        onCommentChange = viewModel::onCommentChange
+        onCommentChange = viewModel::onCommentChange,
+        onClickPostComment = viewModel::onClickPostComment
     )
 }
 
@@ -63,7 +65,8 @@ fun CommentsScreenRoute(
 fun CommentsScreen(
     modifier: Modifier = Modifier,
     uiState: CommentUiState,
-    onCommentChange: (String) -> Unit
+    onCommentChange: (String) -> Unit,
+    onClickPostComment: () -> Unit
 ) {
 
     Scaffold(
@@ -83,7 +86,8 @@ fun CommentsScreen(
         CommentsScreenContent(
             modifier = Modifier.padding(it),
             uiState = uiState,
-            onCommentChange = onCommentChange
+            onCommentChange = onCommentChange,
+            onClickPostComment = onClickPostComment
         )
     }
 
@@ -94,7 +98,8 @@ fun CommentsScreen(
 fun CommentsScreenContent(
     modifier: Modifier = Modifier,
     uiState: CommentUiState,
-    onCommentChange: (String)->Unit
+    onCommentChange: (String)->Unit,
+    onClickPostComment: () -> Unit
 ) {
 
 
@@ -141,7 +146,8 @@ fun CommentsScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomCenter),
                 value = uiState.newComment,
-                onValueChange = onCommentChange
+                onValueChange = onCommentChange,
+                onClickPostComment = onClickPostComment
             )
         }
     }
@@ -201,7 +207,8 @@ fun CommentCard(
 private fun CommentAddSection(
     modifier: Modifier = Modifier,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    onClickPostComment: () -> Unit
 ){
     Row(
         modifier = modifier
@@ -220,7 +227,10 @@ private fun CommentAddSection(
         )
         Icon(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .clickable {
+                         onClickPostComment()
+                },
             imageVector = Icons.Default.Send,
             contentDescription = stringResource(id = R.string.send)
         )
