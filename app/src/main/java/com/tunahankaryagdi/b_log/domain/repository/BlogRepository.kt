@@ -8,4 +8,6 @@ interface BlogRepository {
     suspend fun getBlogs() : BlogResponse
 
     suspend fun getBlogById(id: String) : BlogDetailResponse
+
+    suspend fun getBlogByUserId(userId: String) : BlogResponse
 }

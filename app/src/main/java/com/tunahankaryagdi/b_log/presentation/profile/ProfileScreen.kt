@@ -1,28 +1,27 @@
 package com.tunahankaryagdi.b_log.presentation.profile
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,10 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.domain.model.blog.Blog
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
@@ -42,6 +41,7 @@ import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
+import com.tunahankaryagdi.b_log.utils.DateHelper
 import com.tunahankaryagdi.b_log.utils.ProfileScreenTabs
 
 
@@ -49,7 +49,8 @@ import com.tunahankaryagdi.b_log.utils.ProfileScreenTabs
 fun ProfileScreenRoute(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
-    navigateToLogin: ()->Unit
+    navigateToLogin: ()->Unit,
+    navigateToEditProfile: () -> Unit
 ) {
 
 
@@ -67,6 +68,7 @@ fun ProfileScreenRoute(
     ProfileScreen(
         modifier = modifier,
         uiState = uiState,
+        navigateToEditProfile = navigateToEditProfile,
         onClickSettings = viewModel::onClickSettings,
         onClickTab = viewModel::onClickTab,
         onClickLogout = viewModel::onClickLogout,
@@ -80,6 +82,7 @@ fun ProfileScreenRoute(
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     uiState: ProfileUiState,
+    navigateToEditProfile: () -> Unit,
     onClickSettings :()->Unit,
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
@@ -110,6 +113,7 @@ fun ProfileScreen(
         ProfileScreenContent(
             modifier = modifier.padding(it),
             uiState = uiState,
+            navigateToEditProfile = navigateToEditProfile,
             onClickTab = onClickTab,
             onClickLogout = onClickLogout,
             onClickConfirmLogout = onClickConfirmLogout,
@@ -128,6 +132,7 @@ fun ProfileScreen(
 fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     uiState: ProfileUiState,
+    navigateToEditProfile: ()->Unit,
     onClickTab: (Int)->Unit,
     onClickLogout: () -> Unit,
     onClickConfirmLogout: () -> Unit,
@@ -166,17 +171,97 @@ fun ProfileScreenContent(
             CustomOutlinedButton(
                 modifier = Modifier
                     .align(Alignment.End),
-                onClick = {},
+                onClick = {
+                          navigateToEditProfile()
+                },
                 text = stringResource(id = R.string.edit_profile)
             )
             SpacerHeight(Paddings.smallPadding)
             TabRow(selectedTabIndex = uiState.selectedTabIndex , onClickTab = onClickTab)
+
+            when(uiState.selectedTabIndex){
+                0 ->{
+                    BlogOfUserSection(
+                        uiState = uiState
+                    )
+                }
+                1 ->{
+
+                }
+                else ->{
+
+                }
+            }
+
         }
     }
 
 
 }
 
+@Composable
+fun BlogOfUserSection(
+    modifier: Modifier = Modifier,
+    uiState: ProfileUiState,
+
+) {
+
+    if (uiState.usersBlogLoading){
+        CustomCircularIndicator()
+    }
+    if (uiState.usersBlogError.isNotBlank()){
+        CustomErrorMessage(message = uiState.usersBlogError)
+    }
+
+    uiState.usersBlog?.let {
+
+
+        if (it.isEmpty()){
+            CustomErrorMessage(message = stringResource(id = R.string.no_blog_yet))
+        }
+        else{
+        Box(
+            modifier = modifier
+        ) {
+
+            LazyColumn(){
+                items(uiState.usersBlog.size){index->
+                    if(index != uiState.usersBlog.size-1){
+                        Column {
+                            BlogOfUserCard(blog = uiState.usersBlog[index])
+                            Divider()
+                        }
+                    }
+                    else{
+                        BlogOfUserCard(blog = uiState.usersBlog[index])
+                    }
+                }
+            }
+        }
+        }
+
+    }
+
+
+}
+
+@Composable
+fun BlogOfUserCard(
+    modifier: Modifier = Modifier,
+    blog: Blog
+){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(Paddings.smallPadding)
+
+    ){
+        Column() {
+            Text(text = blog.title,style = MaterialTheme.typography.titleMedium)
+            Text(text =  "Updated at ${DateHelper.calculateDateDifference(blog.updatedAt)}", style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
 
 @Composable
 private fun ProfileImageAndNameSection(name: String, surname: String,follower: Int,following:Int) {

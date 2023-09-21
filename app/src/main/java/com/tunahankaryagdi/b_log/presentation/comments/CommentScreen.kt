@@ -21,14 +21,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,6 +36,7 @@ import com.tunahankaryagdi.b_log.domain.model.comment.Comment
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
+import com.tunahankaryagdi.b_log.presentation.components.CustomTransparentTextField
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
@@ -151,13 +149,6 @@ fun CommentsScreenContent(
             )
         }
     }
-
-
-
-
-
-
-
 }
 
 
@@ -218,18 +209,21 @@ private fun CommentAddSection(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        CommentTextField(
+
+        CustomTransparentTextField(
             modifier = Modifier
                 .weight(5f),
             value = value,
             onValueChange = onValueChange,
-
+            placeholder = {
+                Text(text = stringResource(id = R.string.whats_comment))
+            }
         )
         Icon(
             modifier = Modifier
                 .weight(1f)
                 .clickable {
-                         onClickPostComment()
+                    onClickPostComment()
                 },
             imageVector = Icons.Default.Send,
             contentDescription = stringResource(id = R.string.send)
@@ -237,31 +231,3 @@ private fun CommentAddSection(
     }
 }
 
-@Composable
-private fun CommentTextField(
-    modifier: Modifier = Modifier,
-    value: String,
-    onValueChange: (String)->Unit
-){
-
-    TextField(
-        modifier = modifier,
-        value = value,
-        onValueChange = onValueChange,
-        placeholder= {
-            Text(text = stringResource(id = R.string.whats_comment))
-        },
-
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            errorContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            errorIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
-
-}

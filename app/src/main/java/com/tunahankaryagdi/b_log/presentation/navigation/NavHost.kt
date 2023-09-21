@@ -10,6 +10,8 @@ import com.tunahankaryagdi.b_log.presentation.comments.commentsScreen
 import com.tunahankaryagdi.b_log.presentation.comments.navigateToComments
 import com.tunahankaryagdi.b_log.presentation.detail.detailScreen
 import com.tunahankaryagdi.b_log.presentation.detail.navigateToDetail
+import com.tunahankaryagdi.b_log.presentation.edit_profile.editProfileScreen
+import com.tunahankaryagdi.b_log.presentation.edit_profile.navigateToEditProfile
 import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
@@ -52,7 +54,8 @@ fun NavigationHost(
         addScreen()
 
         profileScreen(
-            navigateToLogin = {navController.navigateToLogin()}
+            navigateToLogin = {navController.navigateToLogin()},
+            navigateToEditProfile = {navController.navigateToEditProfile()}
         )
 
         splashScreen(
@@ -65,5 +68,7 @@ fun NavigationHost(
         )
 
         commentsScreen()
+
+        editProfileScreen()
     }
 }

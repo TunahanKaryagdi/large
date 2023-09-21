@@ -14,4 +14,7 @@ interface BlogService{
     @GET("blogs/{id}")
     suspend fun getBlogById(@Path("id") id: String) : BlogDetailResponse
 
+    @GET("blogs/author/{id}")
+    suspend fun getBlogsByUserId(@Path("id") userId: String) : BlogResponse
+
 }

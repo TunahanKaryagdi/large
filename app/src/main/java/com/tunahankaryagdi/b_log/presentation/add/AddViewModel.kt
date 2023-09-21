@@ -78,7 +78,7 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
 
 data class AddUiState(
-    val title: String = "Title",
+    val title: String = "",
     val selectedImage: Uri? = null,
     val tags: MutableList<String> = mutableListOf(),
     val sections: MutableList<SectionUiState> = mutableListOf(),

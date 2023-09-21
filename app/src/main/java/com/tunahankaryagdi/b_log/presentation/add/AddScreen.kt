@@ -53,7 +53,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
+import com.tunahankaryagdi.b_log.presentation.components.CustomTransparentTextField
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 import com.tunahankaryagdi.b_log.utils.SectionTypes
@@ -111,12 +113,13 @@ fun AddScreen(
                     Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
                 },
                 actions = {
-                    TextButton(
+                    /*TextButton(
                         onClick = { },
                         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 5.dp)
                     ) {
                         Text(stringResource(id = R.string.save))
-                    }
+                    }*/
+                    CustomOutlinedButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.save))
                 }
             )
         }
@@ -196,7 +199,6 @@ fun AddScreenContent(
                                 )
                             }
                         )
-                    
                 }
                 else{
 
@@ -433,30 +435,28 @@ fun SectionDialog(
 }
 @Composable
 private fun TitleTextField(
+    modifier: Modifier = Modifier,
     value :String,
     onTitleValueChange : (String)->Unit
 ){
-    TextField(
+
+    CustomTransparentTextField(
+        modifier = modifier
+            .fillMaxWidth(),
         value = value,
         onValueChange = onTitleValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Transparent),
-        textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
-        colors = TextFieldDefaults.colors(
-            cursorColor = Color.Black,
-            focusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            errorContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-
-            errorIndicatorColor = Color.Transparent,
-
+        placeholder = {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(id = R.string.title),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
             )
+        },
+        textStyle = MaterialTheme.typography.titleLarge.copy( textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
     )
+
 }
 
 @Composable

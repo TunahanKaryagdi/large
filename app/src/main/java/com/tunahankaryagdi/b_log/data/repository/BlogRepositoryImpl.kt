@@ -16,5 +16,9 @@ class BlogRepositoryImpl @Inject constructor(private val blogService: BlogServic
         return blogService.getBlogById(id)
     }
 
+    override suspend fun getBlogByUserId(userId: String): BlogResponse {
+        return blogService.getBlogsByUserId(userId)
+    }
+
 
 }
