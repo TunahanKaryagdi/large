@@ -57,15 +57,11 @@ fun AuthorDetailDto.toAuthorDetail() : AuthorDetail {
 }
 
 data class LikeDetail(
-    val id :String,
-    val blogId: String,
     val userId: String
 )
 
 fun LikeDetailDto.toLikeDetail() : LikeDetail {
     return LikeDetail(
-        id = this.id,
-        blogId = this.blogId,
         userId = this.userId
     )
 }

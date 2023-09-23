@@ -20,7 +20,6 @@ interface UserService{
     @GET("users/{userId}")
     suspend fun getUserById(@Path("userId") userId: String) : UserResponse
 
-
     @PATCH("users/{userId}")
     suspend fun updateUserById(@Path("userId") userId: String, @Body updateUserRequest: UpdateUserRequest) : UpdateUserResponse
 

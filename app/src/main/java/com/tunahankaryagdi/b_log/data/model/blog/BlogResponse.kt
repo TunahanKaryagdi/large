@@ -30,8 +30,6 @@ data class BlogDto(
 
 
 data class LikeDto(
-    val id: String,
-    val blogId: String,
     val userId: String
 )
 

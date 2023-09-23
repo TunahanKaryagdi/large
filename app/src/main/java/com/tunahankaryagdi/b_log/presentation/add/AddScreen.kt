@@ -41,11 +41,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -72,7 +74,7 @@ fun AddScreenRoute(
 
     val uiState : AddUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sectionUiState : SectionUiState by viewModel.sectionUiState.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
 
     AddScreen(
         modifier = modifier,
@@ -84,7 +86,8 @@ fun AddScreenRoute(
         onConfirm = viewModel::onConfirmNewSection,
         onClickAddButtons = viewModel::onClickAddButtons,
         onSubtitleValueChange =viewModel::onSubtitleValueChange,
-        onContentValueChange =  viewModel::onContentValueChange
+        onContentValueChange =  viewModel::onContentValueChange,
+        onClickPost = {viewModel.postImage(context)}
     )
 }
 
@@ -100,8 +103,8 @@ fun AddScreen(
     onConfirm: () -> Unit,
     onClickAddButtons: (SectionTypes) -> Unit,
     onSubtitleValueChange: (String) -> Unit,
-    onContentValueChange: (String) -> Unit
-
+    onContentValueChange: (String) -> Unit,
+    onClickPost: ()->Unit
 ){
 
 
@@ -113,13 +116,8 @@ fun AddScreen(
                     Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.close_screen))
                 },
                 actions = {
-                    /*TextButton(
-                        onClick = { },
-                        elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 5.dp)
-                    ) {
-                        Text(stringResource(id = R.string.save))
-                    }*/
-                    CustomOutlinedButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.save))
+
+                    CustomOutlinedButton(onClick = { onClickPost() }, text = stringResource(id = R.string.post))
                 }
             )
         }

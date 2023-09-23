@@ -60,16 +60,12 @@ fun AuthorDto.toAuthor(): Author {
 }
 
 data class Like(
-    val id: String,
-    val blogId: String,
     val userId: String
 )
 
 
 fun LikeDto.toLike() : Like {
     return Like(
-        id = this.id,
-        blogId = this.blogId,
         userId = this.userId
     )
 }

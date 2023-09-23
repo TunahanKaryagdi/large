@@ -224,6 +224,7 @@ fun BlogCard(
             LazyRow(){
                 items(blog.tags.size){
                     Text(text = blog.tags[it])
+                    SpacerWidth(Paddings.extraSmallPadding)
                 }
             }
         }

@@ -46,7 +46,5 @@ data class AuthorDetailDto(
 )
 
 data class LikeDetailDto(
-    val id: String,
-    val blogId: String,
     val userId: String
 )

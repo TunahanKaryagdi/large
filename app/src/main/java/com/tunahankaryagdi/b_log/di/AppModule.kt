@@ -4,15 +4,18 @@ import android.content.Context
 import com.tunahankaryagdi.b_log.data.repository.AuthRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.BlogRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.CommentRepositoryImpl
+import com.tunahankaryagdi.b_log.data.repository.ImageRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.UserRepositoryImpl
 import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
 import com.tunahankaryagdi.b_log.data.source.remote.AuthService
 import com.tunahankaryagdi.b_log.data.source.remote.BlogService
 import com.tunahankaryagdi.b_log.data.source.remote.CommentService
+import com.tunahankaryagdi.b_log.data.source.remote.ImageService
 import com.tunahankaryagdi.b_log.data.source.remote.UserService
 import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.domain.repository.BlogRepository
 import com.tunahankaryagdi.b_log.domain.repository.CommentRepository
+import com.tunahankaryagdi.b_log.domain.repository.ImageRepository
 import com.tunahankaryagdi.b_log.domain.repository.UserRepository
 import com.tunahankaryagdi.b_log.utils.Constants.BASE_URL
 import dagger.Module
@@ -22,6 +25,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 
@@ -84,10 +88,23 @@ object AppModule {
         return retrofit.create(CommentService::class.java)
     }
 
+
     @Provides
     @Singleton
     fun provideCommentRepository(commentService: CommentService) : CommentRepository{
         return CommentRepositoryImpl(commentService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageService(retrofit: Retrofit): ImageService{
+        return retrofit.create(ImageService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageRepository(imageService: ImageService) : ImageRepository{
+        return ImageRepositoryImpl(imageService)
     }
 
     @Provides

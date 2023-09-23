@@ -52,5 +52,6 @@
     <string name="no_comment_yet">No comment yet</string>
     <string name="error_message">A problem occurred</string>
     <string name="no_blog_yet">No blog yet</string>
+    <string name="post">Post</string>
 
 </resources>
