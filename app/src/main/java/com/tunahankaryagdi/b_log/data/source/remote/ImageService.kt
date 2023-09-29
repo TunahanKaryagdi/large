@@ -1,6 +1,6 @@
 package com.tunahankaryagdi.b_log.data.source.remote
 
-import com.tunahankaryagdi.b_log.data.model.image.PostImageResponse
+import com.tunahankaryagdi.b_log.data.model.image.NewImageResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -10,6 +10,6 @@ interface ImageService {
 
     @Multipart
     @POST("upload/image")
-    suspend fun postImage(@Part image: MultipartBody.Part) : PostImageResponse
+    suspend fun postImage(@Part image: MultipartBody.Part) : NewImageResponse
 
 }

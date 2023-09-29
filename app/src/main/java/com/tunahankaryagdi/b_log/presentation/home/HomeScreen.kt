@@ -1,6 +1,7 @@
 package com.tunahankaryagdi.b_log.presentation.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.blog.Blog
+import com.tunahankaryagdi.b_log.domain.model.blog.Like
+import com.tunahankaryagdi.b_log.domain.model.blog.isLiked
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
@@ -60,7 +67,7 @@ fun HomeScreenRoute(
         modifier = modifier,
         uiState = uiState,
         navigateToAddScreen = navigateToAddScreen,
-        navigateToDetailScreen = navigateToDetailScreen
+        navigateToDetailScreen = navigateToDetailScreen,
     )
 }
 
@@ -69,8 +76,9 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     navigateToAddScreen: ()->Unit,
-    navigateToDetailScreen: (String) -> Unit
+    navigateToDetailScreen: (String) -> Unit,
 ){
+
 
     Scaffold(
         modifier = modifier,
@@ -89,7 +97,8 @@ fun HomeScreen(
         HomeScreenContent(
             modifier = modifier.padding(it),
             uiState = uiState,
-            navigateToDetailScreen = navigateToDetailScreen
+            navigateToDetailScreen = navigateToDetailScreen,
+
         )
     }
 
@@ -103,7 +112,9 @@ fun HomeScreen(
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
-    navigateToDetailScreen: (String) -> Unit
+    navigateToDetailScreen: (String) -> Unit,
+
+
 ) {
     
     if (uiState.isLoading){
@@ -132,7 +143,7 @@ fun HomeScreenContent(
             items(uiState.blogs.size){
                 BlogCard(
                     blog = uiState.blogs[it],
-                    navigateToDetailScreen = navigateToDetailScreen
+                    navigateToDetailScreen = navigateToDetailScreen,
                 )
                 SpacerHeight(Paddings.smallPadding)
             }
@@ -152,8 +163,10 @@ fun BlogCard(
     profileImageSize: Int = 30,
     blogImageSize: Int = 80,
     blog: Blog,
-    navigateToDetailScreen: (String) -> Unit
+    navigateToDetailScreen: (String) -> Unit,
+
 ) {
+
 
     Card(
         modifier = modifier
@@ -172,6 +185,7 @@ fun BlogCard(
             .padding(Paddings.smallPadding)
     ) {
 
+
         Column() {
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -187,7 +201,12 @@ fun BlogCard(
                     )
                 )
                 SpacerWidth(Paddings.extraSmallPadding)
-                Text(text = "${blog.author.firstName} ${blog.author.lastName}")
+                Text(modifier = Modifier.weight(1f),text = "${blog.author.firstName} ${blog.author.lastName}")
+                SpacerWidth(Paddings.extraSmallPadding)
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = stringResource(id = R.string.star)
+                )
                 
             }
             SpacerHeight(Paddings.smallPadding)

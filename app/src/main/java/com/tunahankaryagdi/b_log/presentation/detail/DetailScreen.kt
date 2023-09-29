@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.domain.model.blog.BlogDetail
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
@@ -60,7 +61,9 @@ fun DetailScreenRoute(
 
     DetailScreen(
         uiState = uiState,
-        navigateToComments = navigateToComments
+        navigateToComments = navigateToComments,
+        isLiked = viewModel::isLiked,
+        onClickLike = viewModel::onClickLike
     )
 }
 
@@ -68,7 +71,9 @@ fun DetailScreenRoute(
 fun DetailScreen(
     modifier: Modifier = Modifier,
     uiState: DetailUiState,
-    navigateToComments: (String) ->Unit
+    navigateToComments: (String) ->Unit,
+    isLiked: (BlogDetail)->Boolean,
+    onClickLike: (BlogDetail)->Unit
 ) {
 
     Scaffold(
@@ -79,6 +84,17 @@ fun DetailScreen(
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back))
                 },
                 actions = {
+
+                    Icon(
+                        modifier = Modifier
+                            .clickable {
+                                onClickLike(uiState.blogDetail!!)
+                            },
+                        painter = painterResource(id = if (uiState.isLiked) R.drawable.ic_heart_fill else R.drawable.ic_heart_outlined),
+                        contentDescription = stringResource(id = R.string.like) )
+
+                    SpacerWidth(Paddings.smallPadding)
+
                     Icon(
                         modifier = Modifier
                             .clickable {

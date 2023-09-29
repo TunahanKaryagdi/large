@@ -1,29 +1,30 @@
 package com.tunahankaryagdi.b_log.presentation.add
 
-import android.annotation.SuppressLint
-import android.content.ContentResolver
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tunahankaryagdi.b_log.data.model.blog.NewBlogRequest
+import com.tunahankaryagdi.b_log.data.model.blog.NewBlogSection
+import com.tunahankaryagdi.b_log.di.MyApplication
+import com.tunahankaryagdi.b_log.domain.use_case.PostBlogUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.PostImageUseCase
 import com.tunahankaryagdi.b_log.utils.Resource
 import com.tunahankaryagdi.b_log.utils.SectionTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
-    private val postImageUseCase: PostImageUseCase
+    private val postImageUseCase: PostImageUseCase,
+    private val postBlogUseCase: PostBlogUseCase,
+    private val application: MyApplication
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddUiState> = MutableStateFlow(AddUiState())
@@ -83,26 +84,66 @@ class AddViewModel @Inject constructor(
         _sectionUiState.value = _sectionUiState.value.copy(sectionContent = "" , sectionTitle = "")
     }
 
+    fun onClickPost(context: Context){
 
 
-
-    fun postImage(context: Context){
-        uiState.value.selectedImage?.let {uri->
-
-            val file = uri.toFile(context) ?: return
             viewModelScope.launch {
+                postImage(context)
+
+                delay(2000)
+                val sections = _uiState.value.sections.map {section->
+                    NewBlogSection(section.sectionTitle,section.sectionContent,section.sectionImage,section.type.name)
+                }
+                val newBlog = NewBlogRequest(
+                    title = _uiState.value.title,
+                    image = _uiState.value.imageUrl,
+                    published = true,
+                    authorId = application.getUserId(),
+                    tags = _uiState.value.tags,
+                    sections = sections
+                )
+
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                postImageUseCase.invoke(file).collect{ resource->
+                postBlogUseCase.invoke(newBlog).collect{resource->
 
                     when(resource){
 
                         is Resource.Success->{
-                            _uiState.value = _uiState.value.copy(imageUrl = resource.data.url, isLoading = false)
+                            _uiState.value = AddUiState()
 
                         }
                         is Resource.Error->{
                             _uiState.value = _uiState.value.copy(error = resource.message, isLoading = false)
                         }
+                    }
+
+                }
+
+            }
+
+
+
+
+
+    }
+
+
+
+
+    private suspend fun postImage(context: Context){
+        uiState.value.selectedImage?.let {uri->
+
+            val file = uri.toFile(context) ?: return
+
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            postImageUseCase.invoke(file).collect{ resource->
+
+                when(resource){
+                    is Resource.Success->{
+                        _uiState.value = _uiState.value.copy(imageUrl = resource.data.url, isPhotoLoading = false)
+                    }
+                    is Resource.Error->{
+                        _uiState.value = _uiState.value.copy(error = resource.message, isPhotoLoading = false)
                     }
                 }
             }
@@ -137,6 +178,7 @@ class AddViewModel @Inject constructor(
 
 data class AddUiState(
     val isLoading: Boolean = false,
+    val isPhotoLoading: Boolean = false,
     val error: String = "",
     val title: String = "",
     val selectedImage: Uri? = null,
@@ -151,5 +193,6 @@ data class AddUiState(
 data class SectionUiState(
     val sectionTitle: String = "",
     val sectionContent: String = "",
+    val sectionImage: String = "",
     val type :SectionTypes = SectionTypes.TEXT
 )

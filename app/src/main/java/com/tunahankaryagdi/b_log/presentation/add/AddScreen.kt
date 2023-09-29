@@ -55,6 +55,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
+import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.CustomTransparentTextField
@@ -87,7 +89,7 @@ fun AddScreenRoute(
         onClickAddButtons = viewModel::onClickAddButtons,
         onSubtitleValueChange =viewModel::onSubtitleValueChange,
         onContentValueChange =  viewModel::onContentValueChange,
-        onClickPost = {viewModel.postImage(context)}
+        onClickPost = {viewModel.onClickPost(context)}
     )
 }
 
@@ -156,6 +158,17 @@ fun AddScreenContent(
 ){
 
 
+    if (uiState.isLoading){
+        CustomCircularIndicator()
+    }
+
+    if (uiState.isPhotoLoading){
+        CustomCircularIndicator()
+    }
+
+    if (uiState.error.isNotBlank()){
+        CustomErrorMessage(message = uiState.error)
+    }
 
     if (uiState.showDialog){
         SectionDialog(
@@ -249,7 +262,7 @@ fun AddScreenContent(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.onSecondary, RectangleShape)
+                                .background(Color.LightGray, RectangleShape)
                                 .padding(Paddings.smallPadding)
                         ) {
                             Text(

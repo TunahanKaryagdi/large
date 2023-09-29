@@ -66,6 +66,17 @@ fun LikeDetailDto.toLikeDetail() : LikeDetail {
     )
 }
 
+fun List<LikeDetail>.isLiked(userId: String) : Boolean{
+
+    for (item in this){
+        if (item.userId == userId){
+            return true
+        }
+    }
+    return false
+}
+
+
 data class SectionDetail(
     val blogId: String,
     val content: String,

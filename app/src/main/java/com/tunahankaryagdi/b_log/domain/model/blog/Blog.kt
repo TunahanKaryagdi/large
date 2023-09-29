@@ -13,7 +13,8 @@ data class Blog(
     val title: String,
     val tags: List<String>,
     val updatedAt : String,
-    val likes : List<Like>
+    val likes : List<Like>,
+    val isLikeLoading: Boolean = false,
 )
 fun BlogDto.toBlog() : Blog {
     return Blog(

@@ -1,5 +1,6 @@
 package com.tunahankaryagdi.b_log.presentation.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,25 +15,19 @@ import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 @Composable
 fun CustomTopAppBar(
     modifier: Modifier = Modifier,
-    actions: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
     navigationIcon: @Composable () -> Unit = {},
     title: @Composable () ->Unit = {}
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier
             .padding(horizontal = Paddings.smallPadding),
-        title = {
-              title()
-        },
+        title = title,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        actions = {
-            actions()
-        },
-        navigationIcon = {
-            navigationIcon()
-        }
+        actions = actions,
+        navigationIcon = navigationIcon
     )
 
 

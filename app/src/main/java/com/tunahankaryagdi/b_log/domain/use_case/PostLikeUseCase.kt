@@ -1,20 +1,18 @@
 package com.tunahankaryagdi.b_log.domain.use_case
 
-import com.tunahankaryagdi.b_log.data.model.image.NewImageResponse
-import com.tunahankaryagdi.b_log.domain.repository.ImageRepository
+import com.tunahankaryagdi.b_log.data.model.like.NewLikeResponse
+import com.tunahankaryagdi.b_log.domain.repository.LikeRepository
 import com.tunahankaryagdi.b_log.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.File
 import javax.inject.Inject
 
-class PostImageUseCase @Inject constructor(private val imageRepository: ImageRepository) {
+class PostLikeUseCase @Inject constructor(private val likeRepository: LikeRepository) {
 
-    operator fun invoke(file: File) : Flow<Resource<NewImageResponse>>{
-
+    operator fun invoke(blogId: String,userId: String) : Flow<Resource<NewLikeResponse>> {
         return flow {
             try {
-                val response = imageRepository.postImage(file)
+                val response = likeRepository.postLike(blogId,userId)
                 emit(Resource.Success(response))
             }
             catch (e: Exception){
@@ -23,9 +21,6 @@ class PostImageUseCase @Inject constructor(private val imageRepository: ImageRep
 
 
         }
-
-
     }
-
 
 }
