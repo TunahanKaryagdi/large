@@ -48,7 +48,9 @@ class DetailViewModel @Inject constructor(
 
                 when(resource){
                     is Resource.Success->{
-                        _uiState.value = _uiState.value.copy(isLoading = false, blogDetail = resource.data.blogDetail.toBlogDetail(), isLiked = isLiked(resource.data.blogDetail.toBlogDetail()))
+                        val blogDetail = resource.data.blogDetail.toBlogDetail()
+                        _uiState.value = _uiState.value.copy(isLoading = false, blogDetail = blogDetail)
+                        isLiked(blogDetail)
                     }
                     is Resource.Error->{
                         _uiState.value = _uiState.value.copy(isLoading = false, error = resource.message)
@@ -59,9 +61,24 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun onClickLike(blogDetail: BlogDetail){
 
-        if (isLiked(blogDetail)){
+    fun onClickLike(blogDetail: BlogDetail){
+        viewModelScope.launch {
+            postLikeUseCase.invoke(blogDetail.id,application.getUserId()).collect{resource->
+                when(resource){
+
+                    is Resource.Success->{
+                        _uiState.value = _uiState.value.copy(isLiked = true)
+                    }
+                    is Resource.Error->{
+                        println("değil")
+                    }
+                }
+            }
+        }
+    }
+
+    fun onClickUnlike(blogDetail: BlogDetail){
 
             viewModelScope.launch {
                 deleteLikeUseCase.invoke(blogDetail.id,application.getUserId()).collect{resource->
@@ -69,39 +86,20 @@ class DetailViewModel @Inject constructor(
                     when(resource){
 
                         is Resource.Success->{
-                            _uiState.value = _uiState.value.copy(isLiked = !_uiState.value.isLiked)
+                            _uiState.value = _uiState.value.copy(isLiked = false)
                         }
                         is Resource.Error->{
                             println("değil")
-
                         }
                     }
                 }
             }
-        }
-        else{
-            viewModelScope.launch {
-                postLikeUseCase.invoke(blogDetail.id,application.getUserId()).collect{resource->
-
-                    when(resource){
-
-                        is Resource.Success->{
-                            _uiState.value = _uiState.value.copy(isLiked = !_uiState.value.isLiked)
-                        }
-                        is Resource.Error->{
-                            println("değil")
-
-                        }
-                    }
-                }
-            }
-        }
-
-
     }
 
-    fun isLiked(blogDetail: BlogDetail) :Boolean{
-        return blogDetail.likes.isLiked(application.getUserId())
+
+    fun isLiked(blogDetail: BlogDetail){
+        val isLiked =  blogDetail.likes.isLiked(application.getUserId())
+        _uiState.value = _uiState.value.copy(isLiked = isLiked)
     }
 
 }

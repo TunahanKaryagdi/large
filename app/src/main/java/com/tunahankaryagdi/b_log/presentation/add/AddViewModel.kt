@@ -1,6 +1,8 @@
 package com.tunahankaryagdi.b_log.presentation.add
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -133,7 +136,7 @@ class AddViewModel @Inject constructor(
     private suspend fun postImage(context: Context){
         uiState.value.selectedImage?.let {uri->
 
-            val file = uri.toFile(context) ?: return
+            val file = uri.fileConverter(context) ?: return
 
             _uiState.value = _uiState.value.copy(isLoading = true)
             postImageUseCase.invoke(file).collect{ resource->
@@ -153,7 +156,7 @@ class AddViewModel @Inject constructor(
     private fun Uri.toFile(context: Context) : File?{
 
         val inputStream = context.contentResolver.openInputStream(this)
-        val tempFile = File.createTempFile("temp", ".jpg")
+        val tempFile = File.createTempFile("temp", ".png")
         return try {
             tempFile.outputStream().use { fileOut ->
                 inputStream?.copyTo(fileOut)
@@ -165,6 +168,27 @@ class AddViewModel @Inject constructor(
             null
         }
     }
+
+    private fun Uri.fileConverter(context: Context) : File?{
+        val contentResolver = context.contentResolver
+        try {
+            val inputStream = contentResolver.openInputStream(this)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val file = File(context.cacheDir, "image.png")
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            file
+            return file
+        }
+        catch (e: Exception){
+            return null
+        }
+
+    }
+
+
 
 
     private fun <T> MutableList<T>.addAndReturn(item : T) : MutableList<T>{

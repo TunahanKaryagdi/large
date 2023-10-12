@@ -62,8 +62,8 @@ fun DetailScreenRoute(
     DetailScreen(
         uiState = uiState,
         navigateToComments = navigateToComments,
-        isLiked = viewModel::isLiked,
-        onClickLike = viewModel::onClickLike
+        onClickLike = viewModel::onClickLike,
+        onClickUnlike = viewModel::onClickUnlike
     )
 }
 
@@ -72,8 +72,8 @@ fun DetailScreen(
     modifier: Modifier = Modifier,
     uiState: DetailUiState,
     navigateToComments: (String) ->Unit,
-    isLiked: (BlogDetail)->Boolean,
-    onClickLike: (BlogDetail)->Unit
+    onClickLike: (BlogDetail)-> Unit,
+    onClickUnlike: (BlogDetail)-> Unit,
 ) {
 
     Scaffold(
@@ -85,23 +85,25 @@ fun DetailScreen(
                 },
                 actions = {
 
-                    Icon(
-                        modifier = Modifier
-                            .clickable {
-                                onClickLike(uiState.blogDetail!!)
-                            },
-                        painter = painterResource(id = if (uiState.isLiked) R.drawable.ic_heart_fill else R.drawable.ic_heart_outlined),
-                        contentDescription = stringResource(id = R.string.like) )
+                    uiState.blogDetail?.let{blogDetail->
+                        Icon(
+                            modifier = Modifier
+                                .clickable {
+                                    if (uiState.isLiked) onClickUnlike(blogDetail) else onClickLike(blogDetail)
+                                },
+                            painter = painterResource(id = if (uiState.isLiked) R.drawable.ic_heart_fill else R.drawable.ic_heart_outlined),
+                            contentDescription = stringResource(id = R.string.like) )
 
-                    SpacerWidth(Paddings.smallPadding)
+                        SpacerWidth(Paddings.smallPadding)
 
-                    Icon(
-                        modifier = Modifier
-                            .clickable {
-                                navigateToComments(uiState.blogDetail?.id ?: "")
-                            },
-                        painter = painterResource(id = R.drawable.ic_comment),
-                        contentDescription = stringResource(id = R.string.comments))
+                        Icon(
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToComments(uiState.blogDetail.id)
+                                },
+                            painter = painterResource(id = R.drawable.ic_comment),
+                            contentDescription = stringResource(id = R.string.comments))
+                    }
                 }
                 
             )
