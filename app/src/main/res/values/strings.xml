@@ -55,5 +55,6 @@
     <string name="post">Post</string>
     <string name="like">Like</string>
     <string name="star">Star</string>
+    <string name="role">Role</string>
 
 </resources>

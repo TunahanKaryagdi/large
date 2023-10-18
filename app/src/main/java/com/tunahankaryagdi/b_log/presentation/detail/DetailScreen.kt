@@ -10,15 +10,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,7 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -36,6 +41,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.blog.BlogDetail
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
@@ -67,6 +74,7 @@ fun DetailScreenRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
@@ -76,8 +84,10 @@ fun DetailScreen(
     onClickUnlike: (BlogDetail)-> Unit,
 ) {
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CustomTopAppBar(
                 navigationIcon = {
@@ -104,7 +114,8 @@ fun DetailScreen(
                             painter = painterResource(id = R.drawable.ic_comment),
                             contentDescription = stringResource(id = R.string.comments))
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
                 
             )
         }
@@ -156,14 +167,19 @@ fun DetailScreenContent(
                     updatedAt = DateHelper.calculateDateDifference(blogDetail.updatedAt)
                 )
                 SpacerHeight(Paddings.smallPadding)
-                Image(
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(blogDetail.image)
+                        .crossfade(true)
+                        .build(),
+                    error = painterResource(id = R.drawable.ic_launcher_background),
                     modifier = Modifier
                         .height(blogImageSize.dp)
                         .fillMaxWidth(),
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = stringResource(id = R.string.blog_image)
                 )
+
                 SpacerHeight(Paddings.smallPadding)
             }
             items(blogDetail.sections.size){

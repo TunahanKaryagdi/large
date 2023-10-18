@@ -136,7 +136,7 @@ class AddViewModel @Inject constructor(
     private suspend fun postImage(context: Context){
         uiState.value.selectedImage?.let {uri->
 
-            val file = uri.fileConverter(context) ?: return
+            val file = uri.toFile(context) ?: return
 
             _uiState.value = _uiState.value.copy(isLoading = true)
             postImageUseCase.invoke(file).collect{ resource->

@@ -2,14 +2,9 @@ package com.tunahankaryagdi.b_log.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahankaryagdi.b_log.di.MyApplication
 import com.tunahankaryagdi.b_log.domain.model.blog.Blog
-import com.tunahankaryagdi.b_log.domain.model.blog.Like
-import com.tunahankaryagdi.b_log.domain.model.blog.isLiked
 import com.tunahankaryagdi.b_log.domain.model.blog.toBlog
-import com.tunahankaryagdi.b_log.domain.use_case.DeleteLikeUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.GetBlogsUseCase
-import com.tunahankaryagdi.b_log.domain.use_case.PostLikeUseCase
 import com.tunahankaryagdi.b_log.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +26,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private fun getBlogs(){
+     fun getBlogs(){
 
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -50,13 +45,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-
-
-
-
-
-
 }
 
 
@@ -64,5 +52,4 @@ data class HomeUiState(
     val isLoading: Boolean = false,
     val blogs: List<Blog> = emptyList(),
     val error: String = "",
-    val navigateToDetail: Boolean = false
 )

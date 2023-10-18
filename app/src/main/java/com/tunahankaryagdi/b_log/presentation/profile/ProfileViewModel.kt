@@ -54,7 +54,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun getBlogsByUserId(userId: String){
+    fun getBlogsByUserId(userId: String){
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(usersBlogLoading = true)
             getBlogsByUserIdUseCase.invoke(userId).collect{resource->

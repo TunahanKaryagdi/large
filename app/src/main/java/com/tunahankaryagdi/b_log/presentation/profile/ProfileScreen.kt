@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.blog.Blog
+import com.tunahankaryagdi.b_log.domain.model.user.User
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomOutlinedButton
@@ -57,13 +58,13 @@ fun ProfileScreenRoute(
     val uiState : ProfileUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
-    LaunchedEffect(key1 = viewModel.uiState ){
-        viewModel.uiState.collect{
-            if (it.navigateToLogin){
+    LaunchedEffect(key1 = uiState ){
+            if (uiState.navigateToLogin){
                 navigateToLogin()
             }
         }
-    }
+
+
 
     ProfileScreen(
         modifier = modifier,
@@ -78,6 +79,7 @@ fun ProfileScreenRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
@@ -186,7 +188,7 @@ fun ProfileScreenContent(
                     )
                 }
                 1 ->{
-
+                    AboutUserSection(user = uiState.user)
                 }
                 else ->{
 
@@ -203,7 +205,6 @@ fun ProfileScreenContent(
 fun BlogOfUserSection(
     modifier: Modifier = Modifier,
     uiState: ProfileUiState,
-
 ) {
 
     if (uiState.usersBlogLoading){
@@ -259,6 +260,36 @@ fun BlogOfUserCard(
         Column() {
             Text(text = blog.title,style = MaterialTheme.typography.titleMedium)
             Text(text =  "Updated at ${DateHelper.calculateDateDifference(blog.updatedAt)}", style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+@Composable
+fun AboutUserSection(
+    modifier: Modifier = Modifier,
+    user: User
+) {
+
+    Column(modifier = modifier) {
+        AboutUserCard(title = stringResource(id = R.string.email), content = user.email )
+        Divider()
+        AboutUserCard(title = stringResource(id = R.string.role), content = user.role)
+    }
+
+}
+
+@Composable
+fun AboutUserCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: String
+){
+    Box(modifier = modifier
+        .fillMaxWidth()
+        .padding(Paddings.smallPadding)){
+        Column() {
+            Text(text =  title, style = MaterialTheme.typography.bodySmall)
+            Text(text = content,style = MaterialTheme.typography.titleMedium)
         }
     }
 }

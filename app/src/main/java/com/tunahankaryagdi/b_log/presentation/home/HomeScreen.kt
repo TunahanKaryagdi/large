@@ -26,25 +26,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.blog.Blog
 import com.tunahankaryagdi.b_log.domain.model.blog.Like
 import com.tunahankaryagdi.b_log.domain.model.blog.isLiked
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
+import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
 import com.tunahankaryagdi.b_log.presentation.components.SpacerHeight
 import com.tunahankaryagdi.b_log.presentation.components.SpacerWidth
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
@@ -62,6 +71,10 @@ fun HomeScreenRoute(
     val uiState : HomeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
+    LaunchedEffect(key1 = true,){
+        viewModel.getBlogs()
+    }
+
 
     HomeScreen(
         modifier = modifier,
@@ -71,6 +84,7 @@ fun HomeScreenRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -79,9 +93,17 @@ fun HomeScreen(
     navigateToDetailScreen: (String) -> Unit,
 ){
 
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            CustomTopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.home)) },
+                scrollBehavior = scrollBehavior
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navigateToAddScreen() },
@@ -133,6 +155,7 @@ fun HomeScreenContent(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = Paddings.smallPadding)
+            
     ){
 
 
@@ -191,15 +214,16 @@ fun BlogCard(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
                     modifier = Modifier
                         .size(profileImageSize.dp)
                         .clip(CircleShape),
 
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = stringResource(
                         id = R.string.profile_image
                     )
                 )
+
                 SpacerWidth(Paddings.extraSmallPadding)
                 Text(modifier = Modifier.weight(1f),text = "${blog.author.firstName} ${blog.author.lastName}")
                 SpacerWidth(Paddings.extraSmallPadding)
@@ -215,12 +239,17 @@ fun BlogCard(
                 modifier = Modifier
                     .fillMaxWidth()
             ){
-                Image(
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(blog.image)
+                        .crossfade(true)
+                        .build(),
                     modifier = modifier
                         .size(blogImageSize.dp)
                         .weight(1f),
+                    error = painterResource(id = R.drawable.ic_launcher_background),
+                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
                     contentScale = ContentScale.FillWidth,
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = stringResource(id = R.string.blog_image),
                 )
                 SpacerWidth(Paddings.smallPadding)
@@ -230,7 +259,7 @@ fun BlogCard(
                 ) {
                     Text(
                         text = blog.title,
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
                         text = DateHelper.calculateDateDifference(blog.updatedAt),
