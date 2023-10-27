@@ -97,7 +97,7 @@ class DetailViewModel @Inject constructor(
     }
 
 
-    fun isLiked(blogDetail: BlogDetail){
+    private fun isLiked(blogDetail: BlogDetail){
         val isLiked =  blogDetail.likes.isLiked(application.getUserId())
         _uiState.value = _uiState.value.copy(isLiked = isLiked)
     }

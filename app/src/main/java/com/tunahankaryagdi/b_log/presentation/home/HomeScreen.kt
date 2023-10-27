@@ -1,6 +1,7 @@
 package com.tunahankaryagdi.b_log.presentation.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,6 +29,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,8 +68,13 @@ fun HomeScreenRoute(
     val uiState : HomeUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
-    LaunchedEffect(key1 = true,){
+    LaunchedEffect(key1 = true){
+        viewModel.getSavedBlogs()
         viewModel.getBlogs()
+
+    }
+    LaunchedEffect(key1 = uiState.needRefresh){
+        println("refresh need")
     }
 
 
@@ -73,6 +83,9 @@ fun HomeScreenRoute(
         uiState = uiState,
         navigateToAddScreen = navigateToAddScreen,
         navigateToDetailScreen = navigateToDetailScreen,
+        isSaved = viewModel::isSaved,
+        onClickSaved = viewModel::onClickSaved,
+        onClickUnsaved = viewModel::onClickUnsaved
     )
 }
 
@@ -83,6 +96,9 @@ fun HomeScreen(
     uiState: HomeUiState,
     navigateToAddScreen: ()->Unit,
     navigateToDetailScreen: (String) -> Unit,
+    isSaved : (Blog)-> Boolean,
+    onClickSaved :(Blog) -> Unit,
+    onClickUnsaved: (Blog) -> Unit
 ){
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -112,7 +128,9 @@ fun HomeScreen(
             modifier = modifier.padding(it),
             uiState = uiState,
             navigateToDetailScreen = navigateToDetailScreen,
-
+            isSaved = isSaved,
+            onClickSaved = onClickSaved,
+            onClickUnsaved = onClickUnsaved
         )
     }
 
@@ -126,7 +144,10 @@ fun HomeScreen(
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
+    isSaved : (Blog)-> Boolean,
     navigateToDetailScreen: (String) -> Unit,
+    onClickSaved :(Blog) -> Unit,
+    onClickUnsaved: (Blog) -> Unit
 ) {
     
     if (uiState.isLoading){
@@ -155,6 +176,9 @@ fun HomeScreenContent(
                 BlogCard(
                     blog = uiState.blogs[it],
                     navigateToDetailScreen = navigateToDetailScreen,
+                    isSaved =isSaved,
+                    onClickUnsaved = onClickUnsaved,
+                    onClickSaved = onClickSaved
                 )
                 SpacerHeight(Paddings.smallPadding)
             }
@@ -171,7 +195,11 @@ fun BlogCard(
     blogImageSize: Int = 80,
     blog: Blog,
     navigateToDetailScreen: (String) -> Unit,
+    isSaved : (Blog)-> Boolean,
+    onClickSaved :(Blog) -> Unit,
+    onClickUnsaved: (Blog) -> Unit
 ) {
+
 
 
     Card(
@@ -211,7 +239,11 @@ fun BlogCard(
                 Text(modifier = Modifier.weight(1f),text = "${blog.author.firstName} ${blog.author.lastName}")
                 SpacerWidth(Paddings.extraSmallPadding)
                 Icon(
-                    imageVector = Icons.Default.Star,
+                    modifier = Modifier
+                        .clickable {
+                            if (isSaved(blog)) onClickUnsaved(blog) else  onClickSaved(blog)
+                        },
+                    painter = if (isSaved(blog)) painterResource(id = R.drawable.ic_saved) else painterResource(id = R.drawable.ic_unsaved)  ,
                     contentDescription = stringResource(id = R.string.star)
                 )
                 

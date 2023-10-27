@@ -1,12 +1,15 @@
 package com.tunahankaryagdi.b_log.data.model.saved
 
-data class GetSavedByUserIdResponse(
-    val data : List<GetSavedByUserIdResponseData>,
+import com.google.gson.annotations.SerializedName
+
+data class SavedBlogResponse(
+    val data : List<SavedBlogResponseData>,
     val message: String,
     val status: Int
 )
 
-data class GetSavedByUserIdResponseData(
+data class SavedBlogResponseData(
+    @SerializedName("blog")
     val savedBlogDto: SavedBlogDto,
     val blogId: String,
     val id: String,
