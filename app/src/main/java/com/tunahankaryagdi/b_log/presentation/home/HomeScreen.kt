@@ -1,7 +1,6 @@
 package com.tunahankaryagdi.b_log.presentation.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +13,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,9 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -49,8 +43,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tunahankaryagdi.b_log.R
 import com.tunahankaryagdi.b_log.domain.model.blog.Blog
-import com.tunahankaryagdi.b_log.domain.model.blog.Like
-import com.tunahankaryagdi.b_log.domain.model.blog.isLiked
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
 import com.tunahankaryagdi.b_log.presentation.components.CustomTopAppBar
@@ -135,8 +127,6 @@ fun HomeScreenContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     navigateToDetailScreen: (String) -> Unit,
-
-
 ) {
     
     if (uiState.isLoading){
@@ -158,8 +148,6 @@ fun HomeScreenContent(
             
     ){
 
-
-
             item {
                 SpacerHeight(Paddings.smallPadding)
             }
@@ -170,11 +158,7 @@ fun HomeScreenContent(
                 )
                 SpacerHeight(Paddings.smallPadding)
             }
-
-
     }
-
-
 
 }
 
@@ -187,7 +171,6 @@ fun BlogCard(
     blogImageSize: Int = 80,
     blog: Blog,
     navigateToDetailScreen: (String) -> Unit,
-
 ) {
 
 

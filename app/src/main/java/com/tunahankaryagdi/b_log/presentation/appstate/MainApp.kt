@@ -23,7 +23,6 @@ import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
 import com.tunahankaryagdi.b_log.presentation.splash.splashRoute
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainApp(
     modifier: Modifier = Modifier,

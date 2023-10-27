@@ -7,7 +7,7 @@ import java.util.Locale
 object DateHelper {
 
     fun convertToDate(dateString: String) : Date?{
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        val inputFormat = SimpleDateFormat(Constants.DATE_FORMAT, Locale.US)
         return inputFormat.parse(dateString)
     }
 

@@ -6,6 +6,7 @@ import com.tunahankaryagdi.b_log.data.repository.BlogRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.CommentRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.ImageRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.LikeRepositoryImpl
+import com.tunahankaryagdi.b_log.data.repository.SavedRepositoryImpl
 import com.tunahankaryagdi.b_log.data.repository.UserRepositoryImpl
 import com.tunahankaryagdi.b_log.data.source.local.AuthDataStore
 import com.tunahankaryagdi.b_log.data.source.remote.AuthService
@@ -13,12 +14,14 @@ import com.tunahankaryagdi.b_log.data.source.remote.BlogService
 import com.tunahankaryagdi.b_log.data.source.remote.CommentService
 import com.tunahankaryagdi.b_log.data.source.remote.ImageService
 import com.tunahankaryagdi.b_log.data.source.remote.LikeService
+import com.tunahankaryagdi.b_log.data.source.remote.SavedService
 import com.tunahankaryagdi.b_log.data.source.remote.UserService
 import com.tunahankaryagdi.b_log.domain.repository.AuthRepository
 import com.tunahankaryagdi.b_log.domain.repository.BlogRepository
 import com.tunahankaryagdi.b_log.domain.repository.CommentRepository
 import com.tunahankaryagdi.b_log.domain.repository.ImageRepository
 import com.tunahankaryagdi.b_log.domain.repository.LikeRepository
+import com.tunahankaryagdi.b_log.domain.repository.SavedRepository
 import com.tunahankaryagdi.b_log.domain.repository.UserRepository
 import com.tunahankaryagdi.b_log.utils.Constants.BASE_URL
 import dagger.Module
@@ -120,6 +123,18 @@ object AppModule {
     @Singleton
     fun provideLikeRepository(likeService: LikeService) : LikeRepository{
         return LikeRepositoryImpl(likeService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSavedService(retrofit: Retrofit): SavedService{
+        return retrofit.create(SavedService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSavedRepository(savedService: SavedService) : SavedRepository{
+        return  SavedRepositoryImpl(savedService)
     }
 
     @Provides
