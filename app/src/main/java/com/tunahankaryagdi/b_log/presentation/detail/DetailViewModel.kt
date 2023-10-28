@@ -48,7 +48,7 @@ class DetailViewModel @Inject constructor(
 
                 when(resource){
                     is Resource.Success->{
-                        val blogDetail = resource.data.blogDetail.toBlogDetail()
+                        val blogDetail = resource.data
                         _uiState.value = _uiState.value.copy(isLoading = false, blogDetail = blogDetail)
                         isLiked(blogDetail)
                     }

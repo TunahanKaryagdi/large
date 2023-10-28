@@ -37,7 +37,7 @@ class EditProfileViewModel @Inject constructor(
             getUserByIdUseCase.invoke(id).collect{resource->
                 when(resource){
                     is Resource.Success->{
-                        _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data.user.toUser())
+                        _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data)
                         val user = _uiState.value.user
                         user?.let {
                             _uiState.value = _uiState.value.copy(name = user.firstName, surname = user.lastName, email = user.email )
@@ -67,7 +67,7 @@ class EditProfileViewModel @Inject constructor(
                 updateUserByIdUseCase.invoke(application.getUserId(), UpdateUserRequest(_uiState.value.name,_uiState.value.surname,_uiState.value.email)).collect{resource->
                     when(resource){
                         is Resource.Success->{
-                            _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data.updatedUser.toUser())
+                            _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data)
                             val user = _uiState.value.user
                             user?.let {
                                 _uiState.value = _uiState.value.copy(name = user.firstName, surname = user.lastName, email = user.email )

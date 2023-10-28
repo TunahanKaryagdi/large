@@ -42,7 +42,7 @@ class CommentViewModel @Inject constructor(
             getCommentsByBlogIdUseCase.invoke(blogId).collect{resource->
                 when(resource){
                     is Resource.Success->{
-                        _uiState.value = _uiState.value.copy(isLoading = false, comments = resource.data.comments.map { it.toComment() })
+                        _uiState.value = _uiState.value.copy(isLoading = false, comments = resource.data)
                     }
                     is Resource.Error->{
                         _uiState.value = _uiState.value.copy(isLoading = false, error = resource.message)
@@ -56,7 +56,7 @@ class CommentViewModel @Inject constructor(
     private fun postComment(){
 
         val blogId = savedStateHandle.get<String>(Constants.BLOG_ID) ?: ""
-        val newComment = NewCommentRequest(blogId , _uiState.value.newComment,application.getUserId())
+        val newComment = NewCommentRequest(blogId, _uiState.value.newComment,application.getUserId())
 
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)

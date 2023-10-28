@@ -42,7 +42,7 @@ class ProfileViewModel @Inject constructor(
 
                 when(resource){
                     is Resource.Success->{
-                        _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data.user.toUser())
+                        _uiState.value = _uiState.value.copy(isLoading = false, user = resource.data)
                         getBlogsByUserId(application.getUserId())
                     }
                     is Resource.Error->{
@@ -61,7 +61,7 @@ class ProfileViewModel @Inject constructor(
 
                 when(resource){
                     is Resource.Success->{
-                        _uiState.value = _uiState.value.copy(usersBlogLoading = false, usersBlog = resource.data.blogs.map { it.toBlog() })
+                        _uiState.value = _uiState.value.copy(usersBlogLoading = false, usersBlog = resource.data)
                     }
                     is Resource.Error->{
                         _uiState.value = _uiState.value.copy(usersBlogLoading = false, usersBlogError = resource.message)

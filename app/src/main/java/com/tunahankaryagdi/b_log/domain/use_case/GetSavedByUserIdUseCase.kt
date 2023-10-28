@@ -16,11 +16,7 @@ class GetSavedByUserIdUseCase @Inject constructor(private val savedRepository: S
         return flow {
             try {
                 val response = savedRepository.getSavedByUserId(userId)
-                val x = mutableListOf<SavedBlog>()
-                response.data.map {
-                    x.add(it.savedBlogDto.toSaved())
-                }
-                emit(Resource.Success(x))
+                emit(Resource.Success(response.data.map { it.savedBlogDto.toSaved() }))
 
             }
             catch (e : Exception){

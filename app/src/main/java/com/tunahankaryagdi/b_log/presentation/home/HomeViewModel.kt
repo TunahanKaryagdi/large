@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
             getBlogsUseCase.invoke().collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
-                        _uiState.value = _uiState.value.copy(isLoading = false, blogs = resource.data.blogs.map { it.toBlog() })
+                        _uiState.value = _uiState.value.copy(isLoading = false, blogs = resource.data)
                     }
 
                     is Resource.Error -> {
@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(needRefresh = true)
                     }
                     is Resource.Error->{
-
+                        println("error")
                     }
                 }
             }
