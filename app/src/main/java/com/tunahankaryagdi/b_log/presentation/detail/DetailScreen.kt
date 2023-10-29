@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
@@ -44,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tunahankaryagdi.b_log.R
+import com.tunahankaryagdi.b_log.domain.model.blog.AuthorDetail
 import com.tunahankaryagdi.b_log.domain.model.blog.BlogDetail
 import com.tunahankaryagdi.b_log.presentation.components.CustomCircularIndicator
 import com.tunahankaryagdi.b_log.presentation.components.CustomErrorMessage
@@ -70,7 +70,8 @@ fun DetailScreenRoute(
         uiState = uiState,
         navigateToComments = navigateToComments,
         onClickLike = viewModel::onClickLike,
-        onClickUnlike = viewModel::onClickUnlike
+        onClickUnlike = viewModel::onClickUnlike,
+        onClickFollow = viewModel::onClickFollow
     )
 }
 
@@ -82,6 +83,7 @@ fun DetailScreen(
     navigateToComments: (String) ->Unit,
     onClickLike: (BlogDetail)-> Unit,
     onClickUnlike: (BlogDetail)-> Unit,
+    onClickFollow: (AuthorDetail)->Unit
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -123,7 +125,8 @@ fun DetailScreen(
         DetailScreenContent(
             modifier = Modifier
                 .padding(it),
-            uiState = uiState
+            uiState = uiState,
+            onClickFollow = onClickFollow
         )
 
     }
@@ -136,7 +139,8 @@ fun DetailScreen(
 fun DetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: DetailUiState,
-    blogImageSize: Int  = 175
+    blogImageSize: Int  = 175,
+    onClickFollow: (AuthorDetail)->Unit
 ) {
 
     val blogDetail = uiState.blogDetail
@@ -162,9 +166,11 @@ fun DetailScreenContent(
                     style = MaterialTheme.typography.headlineLarge.copy(color = MaterialTheme.colorScheme.primary)
                 )
                 SpacerHeight(Paddings.smallPadding)
-                UserSection(
-                    authorName = "${blogDetail.author.firstName} ${blogDetail.author.lastName}",
-                    updatedAt = DateHelper.calculateDateDifference(blogDetail.updatedAt)
+                AuthorSection(
+                    author = blogDetail.author,
+                    updatedAt = DateHelper.calculateDateDifference(blogDetail.updatedAt),
+                    onClickFollow = onClickFollow
+
                 )
                 SpacerHeight(Paddings.smallPadding)
                 AsyncImage(
@@ -249,10 +255,11 @@ fun DetailScreenContent(
 
 
 @Composable
-private fun UserSection(
+private fun AuthorSection(
     modifier: Modifier = Modifier,
-    authorName: String,
+    author: AuthorDetail,
     updatedAt: String,
+    onClickFollow: (AuthorDetail)->Unit
 ) {
 
     Row(
@@ -281,7 +288,7 @@ private fun UserSection(
             ){
                 
                 Text(
-                    text = authorName,
+                    text = "${author.firstName} ${author.lastName}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 
@@ -292,6 +299,9 @@ private fun UserSection(
             }
             SpacerWidth(Paddings.smallPadding)
             Text(
+                modifier = Modifier.clickable {
+                    onClickFollow(author)
+                },
                 text = stringResource(id = R.string.follow),
                 style = MaterialTheme.typography.titleMedium
             )

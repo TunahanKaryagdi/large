@@ -30,9 +30,18 @@ class SplashViewModel @Inject constructor(
             delay(2000)
             authDataStore.getAccessToken.collect{token->
 
-                if(token.isNotBlank()){
-                    application.setUserId(JwtHelper.decodeAndGetId(token) ?: "")
-                    _uiState.value = _uiState.value.copy(token =token, navigateToHome = true)
+                if (token.isNotBlank()){
+
+                    if (JwtHelper.isTokenValid(token)){
+                        application.setUserId(JwtHelper.decodeAndGetId(token) ?: "")
+                        _uiState.value = _uiState.value.copy(token =token, navigateToHome = true)
+                    }
+                    else{
+                        //Session expired
+                        println("session expired")
+                        authDataStore.saveTokens("","")
+                        _uiState.value = _uiState.value.copy( navigateToLogin = true)
+                    }
                 }
                 else{
                     _uiState.value = _uiState.value.copy( navigateToLogin = true)
