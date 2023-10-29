@@ -14,6 +14,7 @@ import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
 import com.tunahankaryagdi.b_log.presentation.navigation.TopLevelDestination
 import com.tunahankaryagdi.b_log.presentation.profile.navigateToProfile
+import com.tunahankaryagdi.b_log.presentation.saved.navigateToSaved
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -60,6 +61,7 @@ class MainAppState(
         when (topLevelDestination) {
             TopLevelDestination.HOME -> navController.navigateToHome(topLevelOptions)
             TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelOptions)
+            TopLevelDestination.SAVED -> navController.navigateToSaved(topLevelOptions)
         }
     }
 

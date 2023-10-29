@@ -56,5 +56,7 @@
     <string name="like">Like</string>
     <string name="star">Star</string>
     <string name="role">Role</string>
+    <string name="saved">Saved</string>
+    <string name="no_saved_blogs">No saved blogs</string>
 
 </resources>

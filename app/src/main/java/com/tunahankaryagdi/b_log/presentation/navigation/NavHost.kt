@@ -12,14 +12,13 @@ import com.tunahankaryagdi.b_log.presentation.detail.detailScreen
 import com.tunahankaryagdi.b_log.presentation.detail.navigateToDetail
 import com.tunahankaryagdi.b_log.presentation.edit_profile.editProfileScreen
 import com.tunahankaryagdi.b_log.presentation.edit_profile.navigateToEditProfile
-import com.tunahankaryagdi.b_log.presentation.home.homeRoute
 import com.tunahankaryagdi.b_log.presentation.home.homeScreen
 import com.tunahankaryagdi.b_log.presentation.home.navigateToHome
 import com.tunahankaryagdi.b_log.presentation.login.loginScreen
 import com.tunahankaryagdi.b_log.presentation.login.navigateToLogin
 import com.tunahankaryagdi.b_log.presentation.profile.profileScreen
+import com.tunahankaryagdi.b_log.presentation.saved.savedScreen
 import com.tunahankaryagdi.b_log.presentation.signup.navigateToSignup
-import com.tunahankaryagdi.b_log.presentation.signup.signupRoute
 import com.tunahankaryagdi.b_log.presentation.signup.signupScreen
 import com.tunahankaryagdi.b_log.presentation.splash.splashScreen
 
@@ -70,5 +69,9 @@ fun NavigationHost(
         commentsScreen()
 
         editProfileScreen()
+
+        savedScreen(
+            navigateToDetailScreen = {navController.navigateToDetail(it)}
+        )
     }
 }
