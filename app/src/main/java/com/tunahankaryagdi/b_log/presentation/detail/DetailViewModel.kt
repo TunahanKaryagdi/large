@@ -10,8 +10,10 @@ import com.tunahankaryagdi.b_log.domain.model.blog.Blog
 import com.tunahankaryagdi.b_log.domain.model.blog.BlogDetail
 import com.tunahankaryagdi.b_log.domain.model.blog.isLiked
 import com.tunahankaryagdi.b_log.domain.model.blog.toBlogDetail
+import com.tunahankaryagdi.b_log.domain.use_case.DeleteFollowUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.DeleteLikeUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.GetBlogByIdUseCase
+import com.tunahankaryagdi.b_log.domain.use_case.GetFollowingsUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.PostFollowUseCase
 import com.tunahankaryagdi.b_log.domain.use_case.PostLikeUseCase
 import com.tunahankaryagdi.b_log.utils.Constants
@@ -28,6 +30,8 @@ class DetailViewModel @Inject constructor(
     private val postLikeUseCase: PostLikeUseCase,
     private val deleteLikeUseCase: DeleteLikeUseCase,
     private val postFollowUseCase: PostFollowUseCase,
+    private val deleteFollowUseCase: DeleteFollowUseCase,
+    private val getFollowingsUseCase: GetFollowingsUseCase,
     private val application: MyApplication,
     private val dataStore: AuthDataStore,
     savedStateHandle: SavedStateHandle
@@ -55,6 +59,7 @@ class DetailViewModel @Inject constructor(
                     is Resource.Success->{
                         val blogDetail = resource.data
                         _uiState.value = _uiState.value.copy(isLoading = false, blogDetail = blogDetail)
+                        isFollower(blogDetail)
                         isLiked(blogDetail)
                     }
                     is Resource.Error->{
@@ -110,7 +115,8 @@ class DetailViewModel @Inject constructor(
                             _uiState.value = _uiState.value.copy(isFollower = true)
                         }
                         is Resource.Error->{
-                            println("değil")
+                            println("error")
+
                         }
                     }
                 }
@@ -119,10 +125,43 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    fun onClickUnfollow(author: AuthorDetail){
+        viewModelScope.launch {
+            dataStore.getAccessToken.collect{token->
+                deleteFollowUseCase.invoke(token, author.id).collect{resource->
+                    when(resource){
+                        is Resource.Success->{
+                            _uiState.value = _uiState.value.copy(isFollower = false)
+                        }
+                        is Resource.Error->{
+                            println("error")
 
+                        }
+                    }
+                }
+            }
+
+        }
+    }
     private fun isLiked(blogDetail: BlogDetail){
         val isLiked =  blogDetail.likes.isLiked(application.getUserId())
         _uiState.value = _uiState.value.copy(isLiked = isLiked)
+    }
+
+    private fun isFollower(blogDetail: BlogDetail){
+        viewModelScope.launch {
+            getFollowingsUseCase(application.getUserId()).collect{resource->
+                when(resource){
+                    is Resource.Success->{
+                        val isFollower = resource.data.any {it.followingId == blogDetail.author.id }
+                        _uiState.value = _uiState.value.copy(isFollower = isFollower)
+                    }
+                    is Resource.Error->{
+                        println("error")
+                    }
+                }
+            }
+        }
     }
 
 }

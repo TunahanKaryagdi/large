@@ -71,7 +71,8 @@ fun DetailScreenRoute(
         navigateToComments = navigateToComments,
         onClickLike = viewModel::onClickLike,
         onClickUnlike = viewModel::onClickUnlike,
-        onClickFollow = viewModel::onClickFollow
+        onClickFollow = viewModel::onClickFollow,
+        onClickUnfollow = viewModel::onClickUnfollow
     )
 }
 
@@ -83,7 +84,8 @@ fun DetailScreen(
     navigateToComments: (String) ->Unit,
     onClickLike: (BlogDetail)-> Unit,
     onClickUnlike: (BlogDetail)-> Unit,
-    onClickFollow: (AuthorDetail)->Unit
+    onClickFollow: (AuthorDetail)->Unit,
+    onClickUnfollow: (AuthorDetail)->Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -126,7 +128,8 @@ fun DetailScreen(
             modifier = Modifier
                 .padding(it),
             uiState = uiState,
-            onClickFollow = onClickFollow
+            onClickFollow = onClickFollow,
+            onClickUnfollow = onClickUnfollow
         )
 
     }
@@ -140,7 +143,8 @@ fun DetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: DetailUiState,
     blogImageSize: Int  = 175,
-    onClickFollow: (AuthorDetail)->Unit
+    onClickFollow: (AuthorDetail)->Unit,
+    onClickUnfollow: (AuthorDetail)->Unit,
 ) {
 
     val blogDetail = uiState.blogDetail
@@ -169,8 +173,9 @@ fun DetailScreenContent(
                 AuthorSection(
                     author = blogDetail.author,
                     updatedAt = DateHelper.calculateDateDifference(blogDetail.updatedAt),
-                    onClickFollow = onClickFollow
-
+                    isFollower = uiState.isFollower,
+                    onClickFollow = onClickFollow,
+                    onClickUnfollow = onClickUnfollow
                 )
                 SpacerHeight(Paddings.smallPadding)
                 AsyncImage(
@@ -259,7 +264,9 @@ private fun AuthorSection(
     modifier: Modifier = Modifier,
     author: AuthorDetail,
     updatedAt: String,
-    onClickFollow: (AuthorDetail)->Unit
+    isFollower: Boolean,
+    onClickFollow: (AuthorDetail)->Unit,
+    onClickUnfollow: (AuthorDetail) -> Unit
 ) {
 
     Row(
@@ -300,9 +307,9 @@ private fun AuthorSection(
             SpacerWidth(Paddings.smallPadding)
             Text(
                 modifier = Modifier.clickable {
-                    onClickFollow(author)
+                    if (isFollower) onClickUnfollow(author) else onClickFollow(author)
                 },
-                text = stringResource(id = R.string.follow),
+                text = if (isFollower) stringResource(id = R.string.unfollow) else stringResource(id = R.string.follow),
                 style = MaterialTheme.typography.titleMedium
             )
         }
