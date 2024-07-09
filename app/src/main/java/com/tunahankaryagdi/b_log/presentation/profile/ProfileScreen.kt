@@ -57,14 +57,11 @@ fun ProfileScreenRoute(
 
     val uiState : ProfileUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
     LaunchedEffect(key1 = uiState ){
             if (uiState.navigateToLogin){
                 navigateToLogin()
             }
-        }
-
-
+    }
 
     ProfileScreen(
         modifier = modifier,
@@ -303,7 +300,7 @@ private fun ProfileImageAndNameSection(name: String, surname: String,follower: I
             modifier = Modifier
                 .weight(1f)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.ic_default_user),
             contentDescription = stringResource(id = R.string.profile_image)
         )
         SpacerWidth(Paddings.smallPadding)

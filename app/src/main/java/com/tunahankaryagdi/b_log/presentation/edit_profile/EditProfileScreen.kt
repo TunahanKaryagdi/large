@@ -142,15 +142,7 @@ fun EditProfileScreenContent(
             onValueChange = onEmailChange
         )
         SpacerHeight(Paddings.smallPadding)
-        CustomTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            label = stringResource(id = R.string.password),
-            value = "fad",
-            icon = Icons.Default.Lock,
-            onValueChange = onPasswordChange
-        )
-        SpacerHeight(Paddings.smallPadding)
+
 
         CustomPrimaryButton(
             modifier = Modifier

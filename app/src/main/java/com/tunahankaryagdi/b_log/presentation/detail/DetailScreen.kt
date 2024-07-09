@@ -278,7 +278,7 @@ private fun AuthorSection(
             modifier = Modifier
                 .weight(1f)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.ic_default_user),
             contentDescription = stringResource(
                 id = R.string.profile_image
              )

@@ -178,7 +178,7 @@ fun CommentCard(
                         .size(profileImageSize.dp)
                         .clip(CircleShape),
 
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    painter = painterResource(id = R.drawable.ic_default_user),
                     contentDescription = stringResource(
                         id = R.string.profile_image
                     )
@@ -190,7 +190,7 @@ fun CommentCard(
                 }
 
             }
-            SpacerHeight(Paddings.smallPadding)
+            SpacerHeight(Paddings.extraSmallPadding)
             Text(text = comment.content, maxLines = 4,style = MaterialTheme.typography.titleMedium)
         }
     }

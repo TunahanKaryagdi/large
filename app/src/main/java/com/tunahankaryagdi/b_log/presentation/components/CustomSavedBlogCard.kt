@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tunahankaryagdi.b_log.R
-import com.tunahankaryagdi.b_log.domain.model.blog.Blog
 import com.tunahankaryagdi.b_log.domain.model.saved.SavedBlog
 import com.tunahankaryagdi.b_log.presentation.utils.Paddings
 import com.tunahankaryagdi.b_log.utils.DateHelper
@@ -71,11 +70,10 @@ fun CustomSavedBlogCard(
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        painter = painterResource(id = R.drawable.ic_default_user),
                         modifier = Modifier
                             .size(profileImageSize.dp)
                             .clip(CircleShape),
-
                         contentDescription = stringResource(
                             id = R.string.profile_image
                         )
